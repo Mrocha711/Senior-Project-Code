@@ -1048,14 +1048,102 @@ elif procedure == "Desgining":
     if __name__ == "__main__":
         beam_type = choice(question, options)
     # Asking for all required values
-    if beam_type == "Singely Reinforced Known Dimensions":
-        Questions = ["f'c (psi)", "b (in)", "h (in)", "fy (ksi)", "Aggergate size", "Mu (kft)", "Stirrup Leg Size", "Number of legs"]
+    Beam_type = ["Simply Supported", "Cantilever"]
+    Beam_loading = ["point load", "distributed load"]
+    T_F = ["True", "False"]
+    Weather = ["No exposure to weather or ground", "Exposed to weather or ground", "Cast against and constant contact with ground"]
+    if __name__ == '__main__':
+        questions = ["Beam type", "Beam loading", "Supports Non structural Elemnts that mat be damaged", "What type of exposure", "Can Shear be taken d away from support"]
+        answers = [Beam_type, Beam_loading, T_F, Weather, T_F]
+        B_type, load, Non_Struct, exposure, d_away = MultiDrop(questions, answers)
+    
+    if load == "point load":
+        Questions = ["What is the dead load (k)", "What is the live load (k)", "Live Load percent sustained (%)", "Time dependent Factor"]
         if __name__ == '__main__':
-            fpc, b, h, fy, dagg, Mu, Stirrup_size, Legs = get_inputs()
-        question = "What type of exposure"
-        options = ["No exposure to weather or ground", "Exposed to weather or ground", "Cast against and constant contact with ground"]
-        if __name__ == "__main__":
-            exposure = choice(question, options)
+            P_d, P_l, percent, zata_s = get_inputs()
+    elif load == "distributed load":
+        Questions = ["What is the dead distributed load (k/ft)", "What is the live distributed load (k/ft)",  "Live Load percent sustained (%)", "Time dependent Factor"]
+        if __name__ == '__main__':
+            w_d, w_l, percent, zata_s = get_inputs()
+    
+    if beam_type == "Singely Reinforced Known Dimensions":
+        Questions = ["f'c (psi)", "b (in)", "h (in)", "fy (ksi)", "Nu (k)", "Length of beam (ft)", "Aggergate size", "Weight of Concrete pcf", "Stirrup Leg Size", "Number of legs"]
+        if __name__ == '__main__':
+            fpc, b, h, fy, Nu, L, dagg, wc, Stirrup_size, Legs = get_inputs()
+        # finding values of Vu,Mu, and partial deflection
+        if B_type == "Simply Supported":
+            if load == "point load":
+                # load combos
+                P1 = 1.6*P_d
+                print("P1 = 1.6D     1.6*" + str(P_d) + " = " + str(P1) + " kips")
+                P2 = 1.2*P_d+1.4*P_l
+                print("P1 = 1.2D+1.4L     1.2*" + str(P_d) + "1.4*" + str(P_l) + " = " + str(P2) + " kips")
+                P = max(P1,P2)
+                print("Therefor use P = " + str(P) + " kips")
+                # solving
+                Vu = P/2
+                print("Vu = P/2     " + str(P) + "/2 = " + str(Vu) + " kips")
+                Mu = P*L/4
+                print("Mu = PL/4     " + str(P) + "*" + str(L) + "/4 = " + str(Mu) + " kip ft")
+                print("Δ*EI = P*(L*12)^3/(48)")
+                del_iD_EI = P_d*(L*12)**3/(48)
+                print("Δ_iD*EI = " + str(P_d) + "*(" + str(L) + "*12)^3/(48) = " + str(round(del_iD_EI,3)))
+                del_iD_L_EI = (P_d+P_l)*(L*12)**3/(48)
+                print("Δ_iD_L*EI = (" + str(P_d) + "+" + str(P_l) + ")*(" + str(L) + "*12)^3/(48) = " + str(round(del_iD_L_EI,3)))
+            elif load == "distributed load":
+                # load combos
+                W1 = 1.6*w_d
+                print("W1 = 1.6D     1.6*" + str(w_d) + " = " + str(W1) + " kips")
+                W2 = 1.2*w_d+1.4*w_l
+                print("W1 = 1.2D+1.4L     1.2*" + str(w_d) + "1.4*" + str(w_l) + " = " + str(W2) + " kips")
+                W = max(W1,W2)
+                print("Therefor use W = " + str(W) + " kips")
+                # solving
+                Vu = W*L/2
+                print("Vu = WL/2     " + str(W) + "*" + str(L) + "/2 = " + str(Vu) + " kip")
+                Mu = W*L**2/8
+                print("Mu = WL^2/8     " + str(W) + "*" + str(L) + "^2/8 = " + str(Mu) + " kip ft")
+                print("Δ*EI = 5*w*L^4*12^3/(384)")
+                del_iD_EI = 5*w_d*L**4*12**3/(384)
+                print("Δ_iD*EI = 5*" + str(w_d) + "*" + str(L) + "^4*12^3/(384) = " + str(round(del_iD_EI,3)))
+                del_iD_L_EI = 5*(w_d+w_l)*L**4*12**3/(384)
+                print("Δ_iD_L*EI = 5*(" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(384) = " + str(round(del_iD_L_EI,3)))
+        elif B_type == "Cantilever":
+            if load == "point load":
+                # load combos
+                P1 = 1.6*P_d
+                print("P1 = 1.6D     1.6*" + str(P_d) + " = " + str(P1) + " kips")
+                P2 = 1.2*P_d+1.4*P_l
+                print("P1 = 1.2D+1.4L     1.2*" + str(P_d) + "1.4*" + str(P_l) + " = " + str(P2) + " kips")
+                P = max(P1,P2)
+                print("Therefor use P = " + str(P) + " kips")
+                # solving
+                Vu = P
+                print("Vu = P = " + str(P) + " kips")
+                Mu = P*L
+                print("Mu = PL     " + str(P) + "*" + str(L) + " = " + str(Mu) + " kip ft")
+                print("Δ*EI = P*(L*12)^3/(3)")
+                del_iD_EI = P_d*(L*12)**3/(3)
+                print("Δ_iD*EI = " + str(P_d) + "*(" + str(L) + "*12)^3/(3) = " + str(round(del_iD_EI,3)) + " in")
+                del_iD_L_EI = (P_d+P_l)*(L*12)**3/(3)
+                print("Δ_iD_L*EI = (" + str(P_d) + "+" + str(P_l) + ")*(" + str(L) + "*12)^3/(3) = " + str(round(del_iD_L_EI,3)) + " in")
+            elif load == "distributed load":
+                W1 = 1.6*w_d
+                print("W1 = 1.6D     1.6*" + str(w_d) + " = " + str(W1) + " kips")
+                W2 = 1.2*w_d+1.4*w_l
+                print("W1 = 1.2D+1.4L     1.2*" + str(w_d) + "1.4*" + str(w_l) + " = " + str(W2) + " kips")
+                W = max(W1,W2)
+                print("Therefor use W = " + str(W) + " kips")
+                # solving
+                Vu = W*L
+                print("Vu = WL     " + str(W) + "*" + str(L) + " = " + str(Vu) + " kip")
+                Mu = W*L**2/2
+                print("Mu = WL^2/2     " + str(W) + "*" + str(L) + "^2/2 = " + str(Mu) + " kip ft")
+                print("Δ*EI = w*L^4*12^3/(8)")
+                del_iD_EI = w_d*L**4*12**3/(8)
+                print("Δ_iD*EI = " + str(w_d) + "*" + str(L) + "^4*12^3/(8) = " + str(round(del_iD_EI,3)) + " in")
+                del_iD_L_EI = (w_d+w_l)*L**4*12**3/(8)
+                print("Δ_iD_L*EI = (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(8) = " + str(round(del_iD_L_EI,3)) + " in")
         # find required area of steel
         phif = 0.9
         print("φf = 0.9")
@@ -1115,6 +1203,8 @@ elif procedure == "Desgining":
             num_of_bars[i] = As_req/flexure_rebar_area[i]
             flexure_rebar_math[i] += "\n#_bars = " + str(round(As_req,3)) + "/" + str(flexure_rebar_area[i]) + " = " + str(round(num_of_bars[i],3))
             num_of_bars[i] = round(num_of_bars[i]+0.5)
+            if num_of_bars[i] == 1:
+                num_of_bars[i] =2
             flexure_rebar_math[i] += "\nTherefore #_bars is = " + str(num_of_bars[i])
             As[i] = flexure_rebar_area[i]*num_of_bars[i]
             flexure_rebar_math[i] += "\nAs = " + str(flexure_rebar_area[i]) + "*" + str(num_of_bars[i]) + " = " + str(As[i]) + " in^2"
@@ -1213,19 +1303,23 @@ elif procedure == "Desgining":
                             phif = 0.9
                             PhifMn[i] = phif*As[i]*fy*(d[i]-a/2)/12
                             flexure_rebar_math[i] += "\nΦfMn = Φf*As*fy*(d-a/2)/12     " + str(phif) + "*" + str(As[i]) + "*" + str(fy) + "*(" + str(d[i]) + "-" + str(round(a,3)) + "/2)/12 = " + str(round(PhifMn[i],3)) + " kft"
-                            dc_ratio[i] = Mu/PhifMn[i]
-                            flexure_rebar_math[i] += "\ndc_ratio = Mu/ΦfMn     " + str(Mu) + "/" + str(round(PhifMn[i],3)) + " = " + str(round(dc_ratio[i],3))
-                            # Checking Asmin
-                            Asmin1 = 3*(fpc)**(1/2)/(fy*1000)*b*d[i]
-                            flexure_rebar_math[i] += "\nAsmin1 = 3√(fpc)/(fy*1000)*b*d     3√(" + str(fpc) + ")/(" + str(fy) + "*1000)*" + str(b) + "*" + str(d[i]) + " = " + str(round(Asmin1,3)) + " in^2"
-                            Asmin2 = 200/(fy*1000)*b*d[i]
-                            flexure_rebar_math[i] += "\nAsmin2 = 200/(fy*1000)*b*d     200/(" + str(fy) + "*1000)*" + str(b) + "*" + str(d[i]) + " = " + str(round(Asmin2,3)) + " in^2"
-                            Asmin = max(Asmin1, Asmin2)
-                            flexure_rebar_math[i] += "\nAsmin = " + str(round(Asmin,3)) + " in^2"
-                            if As[i] >= Asmin:
-                                flexure_rebar_math[i] += "\nAs = " + str(round(As[i],3)) + " ≥ Asmin = " + str(round(Asmin,3)) + " GOOD"
+                            if PhifMn[i] < Mu:
+                                flexure_rebar_math += "\nΦfMn < Mu     " + str(round(PhifMn[i])) + " < " + str(round(Mu)) + " Beam fails NO GOOD"
                             else:
-                                flexure_rebar_math[i] += "\nAs = " + str(round(As[i],3)) + " ≥ Asmin = " + str(round(Asmin,3)) + " NO Beam fails"
+                                flexure_rebar_math += "\nΦfMn ≥ Mu     " + str(round(PhifMn[i],3)) + " ≥ " + str(round(Mu,3)) + " GOOD"
+                                dc_ratio[i] = Mu/PhifMn[i]
+                                flexure_rebar_math[i] += "\ndc_ratio = Mu/ΦfMn     " + str(Mu) + "/" + str(round(PhifMn[i],3)) + " = " + str(round(dc_ratio[i],3))
+                                # Checking Asmin
+                                Asmin1 = 3*(fpc)**(1/2)/(fy*1000)*b*d[i]
+                                flexure_rebar_math[i] += "\nAsmin1 = 3√(fpc)/(fy*1000)*b*d     3√(" + str(fpc) + ")/(" + str(fy) + "*1000)*" + str(b) + "*" + str(d[i]) + " = " + str(round(Asmin1,3)) + " in^2"
+                                Asmin2 = 200/(fy*1000)*b*d[i]
+                                flexure_rebar_math[i] += "\nAsmin2 = 200/(fy*1000)*b*d     200/(" + str(fy) + "*1000)*" + str(b) + "*" + str(d[i]) + " = " + str(round(Asmin2,3)) + " in^2"
+                                Asmin = max(Asmin1, Asmin2)
+                                flexure_rebar_math[i] += "\nAsmin = " + str(round(Asmin,3)) + " in^2"
+                                if As[i] >= Asmin:
+                                    flexure_rebar_math[i] += "\nAs = " + str(round(As[i],3)) + " ≥ Asmin = " + str(round(Asmin,3)) + " GOOD"
+                                else:
+                                    flexure_rebar_math[i] += "\nAs = " + str(round(As[i],3)) + " ≥ Asmin = " + str(round(Asmin,3)) + " NO Beam fails"
                         else:
                             flexure_rebar_math[i] += "\nεt = " + str(round(es,5)) + " ≥ εy + 0.003 = " + str(round(ey,5)) + " + 0.003 = " + str(round(ey+0.003,5))+ " NO"
                             flexure_rebar_math[i] += "\nFails Φf = 0.9"
@@ -1269,12 +1363,56 @@ elif procedure == "Desgining":
         #printing all math for Flexure check
         for i in range(len(flexure_rebar)):
             print(flexure_rebar_math[i])
-        #quick overview
+        #quick flexure overview
         for i in range(len(flexure_rebar)):
             print("dc_ratio of " + str(num_of_bars[i]) + " #" + str(flexure_rebar[i]) + "bars: " + str(round(dc_ratio[i],3)))
-                        
-                        
-                        
+        #shear desgin
+        # only pulling working values
+        counter = 0
+        for i in range(len(flexure_rebar)):
+            if d[i] != 0:
+                counter +=1
+        d_shear = np.zeros(counter)
+        placement = 0
+        for i in range(len(flexure_rebar)):
+            if d[i] != 0:
+                d_shear[placement] = d[i]
+                placement +=1
+        Vu_d = np.zeros(counter)
+        shear_math = [""]*counter
+        # finding Vu@d
+        for i in range(counter):
+            if d_away == "True":
+                if load == "point load":
+                    Vu_d[i] = Vu
+                    shear_math[i] += "\nVu@d is just Vu since no change."
+                elif load == "distributed load":
+                    Vu_d[i] = Vu-W*d_shear[i]/12
+                    shear_math[i] += "\nVu@d = Vu-W*d/12     " + str(round(Vu,3)) + "-" + str(round(W,3)) + "*" + str(d_shear[i]) + "/12 = " + str(round(Vu_d[i],3))
+            else:
+                Vu_d[i] = Vu
+                shear_math[i] += "\nVu since not taking d away."
+        # How many bands/ Band strength
+        phiv = 0.75
+        print("\nΦv = 0.75")
+        if wc <= 100:
+            print("wc ≤ 100     " + str(wc) + " ≤ 100 Therefore λ = 0.75")
+            lam = 0.75
+        elif wc >= 135:
+            print("wc ≥ 135     " + str(wc) + " ≤ 135 Therefore λ = 1")
+            lam = 1
+        else:
+            lam = 0.0075*wc
+            print("100 < wc < 135     100 < " + str(wc) + " < 135 Therefore λ = 0.0075*wc     0.0075*" + str(wc) + " = " + str(lam))
+        No_Stirrup = np.zeros(counter)
+        phiv_Vc = np.zeros(counter)
+        for i in range(counter):
+            No_Stirrup[i] = phiv*lam*fpc**0.5*b*d_shear[i]/1000
+            shear_math[i] += "\nNo Stirrup = Φv*λ*√(f'c)*b*d/1000     " + str(phiv) + "*" + str(lam) + "*√(" + str(fpc) + ")*" + str(b) + "*" + str(d_shear[i]) + "/1000 = " + str(round(No_Stirrup[i],3)) + " k"
+            phiv_Vc[i] = phiv*(2*lam*fpc**0.5/1000+Nu/(6*b*h))*b*d_shear[i]
+            shear_math[i] += "\nΦvVc = Φv(2*λ*√(f'c)/1000+Nu/(6*b*h))*b*d    " + str(phiv) + "(2*" + str(lam) + "*√(" + str(fpc) + ")/1000+" + str(Nu) + "/(6*" + str(b) + "*" + str(h) + "*" + str(b) + "))*" + str(d_shear[i]) + "/1000 = " + str(round(phiv_Vc[i],3)) + " k"
+                           
+                           
                         
                         
                     
