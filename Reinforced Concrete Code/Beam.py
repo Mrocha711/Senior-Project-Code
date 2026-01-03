@@ -1067,9 +1067,9 @@ elif procedure == "Desgining":
             w_d, w_l, percent, zata_s = get_inputs()
     
     if beam_type == "Singely Reinforced Known Dimensions":
-        Questions = ["f'c (psi)", "b (in)", "h (in)", "fy (ksi)", "Nu (k)", "Length of beam (ft)", "Aggergate size", "Weight of Concrete pcf", "Stirrup Leg Size", "Number of legs"]
+        Questions = ["f'c (psi)", "b (in)", "h (in)", "fy (ksi)", "Nu (k)", "Length of beam (ft)", "Aggergate size", "Weight of Concrete pcf", "fyt (ksi)", "Stirrup Leg Size", "Number of legs"]
         if __name__ == '__main__':
-            fpc, b, h, fy, Nu, L, dagg, wc, Stirrup_size, Legs = get_inputs()
+            fpc, b, h, fy, Nu, L, dagg, wc, fyt, Stirrup_size, Legs = get_inputs()
         # finding values of Vu,Mu, and partial deflection
         if B_type == "Simply Supported":
             if load == "point load":
@@ -1411,15 +1411,140 @@ elif procedure == "Desgining":
             shear_math[i] += "\nNo Stirrup = Φv*λ*√(f'c)*b*d/1000     " + str(phiv) + "*" + str(lam) + "*√(" + str(fpc) + ")*" + str(b) + "*" + str(d_shear[i]) + "/1000 = " + str(round(No_Stirrup[i],3)) + " k"
             phiv_Vc[i] = phiv*(2*lam*fpc**0.5/1000+Nu/(6*b*h))*b*d_shear[i]
             shear_math[i] += "\nΦvVc = Φv(2*λ*√(f'c)/1000+Nu/(6*b*h))*b*d    " + str(phiv) + "(2*" + str(lam) + "*√(" + str(fpc) + ")/1000+" + str(Nu) + "/(6*" + str(b) + "*" + str(h) + "*" + str(b) + "))*" + str(d_shear[i]) + "/1000 = " + str(round(phiv_Vc[i],3)) + " k"
-                           
-                           
-                        
-                        
-                    
-
-
-
-
+        #creating bands
+        V = np.zeros(counter)
+        V_analyze = np.zeros(counter)
+        smax = np.zeros(counter)
+        across_smax = np.zeros(counter)
+        if load == "point load":
+            for i in range(counter):
+                if Vu_d[i] <= No_Stirrup[i]:
+                    shear_math[i] += "\nVu@d = " + str(round(Vu_d[i],3)) + " ≤ " + str(round(No_Stirrup[i],3)) + " Therefore no stirrups required along beam since point load."
+                elif Vu_d[i] > phiv_Vc[i]:
+                    shear_math[i] += "\nVu@d = " + str(round(Vu_d[i],3)) + " > " + str(round(phiv_Vc[i],3))
+                    V[i] = Vu_d[i]/phiv-phiv_Vc[i]/phiv
+                    shear_math[i] += "\nVu@d/Φv-ΦvVc/Φv     " + str(round(Vu_d[i],3)) + "/" + str(phiv) + "-" + str(round(phiv_Vc[i],3)) + "/" + str(phiv) + str(round(V[i],3))
+                    V_analyze[i] = 4*fpc**0.5*b*d_shear[i]/1000
+                    shear_math[i] += "\n4√(f'c)*b*d/1000     4*√(" + str(fpc) + ")*" + str(b) + "*" + str(d_shear[i]) + "/1000 = " + str(round(V_analyze[i],3)) + " k"
+                    if V[i] <= V_analyze[i]:
+                        shear_math[i] += "\n" + str(round(V[i],3)) + " ≤ " + str(round(V_analyze[i],3))
+                        smax1 = d_shear[i]/2
+                        shear_math[i] += "\nsmax1 = d/2     " + str(d_shear[i]) + "/2 = " + str(smax1) + " in"
+                        smax2 = 24
+                        shear_math[i] += "\nsmax2 = 24 in"
+                        smax1 = min(smax1,smax2)
+                        shear_math[i] += "\nsmax = " + str(smax1) + " in"
+                        s = b-2*cover-Legs*0.5*shear_rebar_diameter
+                        shear_math[i] += "\n Does the number of legs work"
+                        shear_math[i] += "\ns = b-2*cover-Legs*0.5*ds     " + str(b) +"-2*" + str(cover) + "-" + str(Legs) + "*0.5*" + str(shear_rebar_diameter) + " = " + str(round(s,3)) + " in" 
+                        across_smax1 = d[i]
+                        shear_math[i] += "\nacross_smax1 = d     " + str(d[i]) + " = " + str(across_smax1) + " in"
+                        across_smax2 = 24
+                        shear_math[i] += "\nacross_smax2 = 24 in"
+                        across_smax[i] = min(across_smax1,across_smax2)
+                        shear_math[i] += "\nacross_smax = " + str(across_smax[i]) + " in"
+                        if s > across_smax[i]:
+                            shear_math[i] += "\ns > across_smax     " + str(round(s,3)) + " > " + str(across_smax[i])
+                            shear_math[i] += "\nThe number of legs isn't adequete you need to increase the leg number by at least 1"
+                        else:
+                            shear_math[i] += "\ns ≤ across_smax     " + str(round(s,3)) + " ≤ " + str(across_smax[i]) + " GOOD"
+                    else:
+                        shear_math[i] += "\n" + str(round(V[i],3)) + " > " + str(round(V_analyze[i],3))
+                        smax1 = d_shear[i]/4
+                        shear_math[i] += "\nsmax1 = d/4     " + str(d_shear[i]) + "/4 = " + str(smax1) + " in"
+                        smax2 = 12
+                        shear_math[i] += "\nsmax2 = 12 in"
+                        smax1 = min(smax1,smax2)
+                        shear_math[i] += "\nsmax = " + str(smax1) + " in"
+                        s = b-2*cover-Legs*0.5*shear_rebar_diameter
+                        shear_math[i] += "\n Does the number of legs work"
+                        shear_math[i] += "\ns = b-2*cover-Legs*0.5*ds     " + str(b) +"-2*" + str(cover) + "-" + str(Legs) + "*0.5*" + str(shear_rebar_diameter) + " = " + str(round(s,3)) + " in" 
+                        across_smax1 = d[i]/2
+                        shear_math[i] += "\nacross_smax1 = d/2     " + str(d[i]) + "/2 = " + str(across_smax1) + " in"
+                        across_smax2 = 12
+                        shear_math[i] += "\nacross_smax2 = 12 in"
+                        across_smax[i] = min(across_smax1,across_smax2)
+                        shear_math[i] += "\nacross_smax = " + str(across_smax[i]) + " in"
+                        if s > across_smax[i]:
+                            shear_math[i] += "\ns > across_smax     " + str(round(s,3)) + " > " + str(across_smax[i])
+                            shear_math[i] += "\nThe number of legs isn't adequete you need to increase the leg number by at least 1"
+                        else:
+                            shear_math[i] += "\ns ≤ across_smax     " + str(round(s,3)) + " ≤ " + str(across_smax[i]) + " GOOD"
+                    Av = shear_rebar_area*Legs
+                    shear_math[i] += "\nAv = " + str(shear_rebar_area) + "*" + str(Legs) + " = " + str(Av) + " in^2"
+                    smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
+                    shear_math[i] += "\nsmax1 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
+                    smax3 = Av*fyt*1000/(50*b)
+                    shear_math[i] += "\nsmax2 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
+                    smax1 = min(smax1,smax2,smax3)
+                    shear_math[i] += "\nsmax = " + str(round(smax1,3)) + " in"
+                    smax2 = phiv*Av*fyt*d_shear[i]/(Vu_d[i]-phiv_Vc[i])
+                    shear_math[i] += "\nsmax1 = Φv*Av*fyt*d/(Vu@d-ΦvVc)     " + str(phiv) + "*" + str(Av) + "*" + str(fyt) + "*" + str(d_shear[i]) + "/(" + str(round(Vu_d[i],3)) + "-" + str(round(phiv_Vc,3)) + ") = " + str(round(smax2,3))
+                    smax[i] = min(smax1,smax2)
+                    shear_math[i] += "\nsmax = " + str(round(smax[i],3)) + " in"
+                    smax[i] = round(smax[i]-0.5)
+                    shear_math[i] += "\nTherefore smax = " + str(smax[i]) + " in"
+                else:
+                    shear_math[i] += "\n" + str(round(No_Stirrup[i],3)) + " < Vu@d = " + str(round(Vu_d[i],3)) + " ≤ " + str(round(phiv_Vc[i],3))
+                    V[i] = Vu_d[i]/phiv-phiv_Vc[i]/phiv
+                    shear_math[i] += "\nVu@d/Φv-ΦvVc/Φv     " + str(round(Vu_d[i],3)) + "/" + str(phiv) + "-" + str(round(phiv_Vc[i],3)) + "/" + str(phiv) + str(round(V[i],3))
+                    V_analyze[i] = 4*fpc**0.5*b*d_shear[i]/1000
+                    shear_math[i] += "\n4√(f'c)*b*d/1000     4*√(" + str(fpc) + ")*" + str(b) + "*" + str(d_shear[i]) + "/1000 = " + str(round(V_analyze[i],3)) + " k"
+                    if V[i] <= V_analyze[i]:
+                        shear_math[i] += "\n" + str(round(V[i],3)) + " ≤ " + str(round(V_analyze[i],3))
+                        smax1 = d_shear[i]/2
+                        shear_math[i] += "\nsmax1 = d/2     " + str(d_shear[i]) + "/2 = " + str(smax1) + " in"
+                        smax2 = 24
+                        shear_math[i] += "\nsmax2 = 24 in"
+                        smax1 = min(smax1,smax2)
+                        shear_math[i] += "\nsmax = " + str(smax1) + " in"
+                        s = b-2*cover-Legs*0.5*shear_rebar_diameter
+                        shear_math[i] += "\n Does the number of legs work"
+                        shear_math[i] += "\ns = b-2*cover-Legs*0.5*ds     " + str(b) +"-2*" + str(cover) + "-" + str(Legs) + "*0.5*" + str(shear_rebar_diameter) + " = " + str(round(s,3)) + " in" 
+                        across_smax1 = d[i]
+                        shear_math[i] += "\nacross_smax1 = d     " + str(d[i]) + " = " + str(across_smax1) + " in"
+                        across_smax2 = 24
+                        shear_math[i] += "\nacross_smax2 = 24 in"
+                        across_smax[i] = min(across_smax1,across_smax2)
+                        shear_math[i] += "\nacross_smax = " + str(across_smax[i]) + " in"
+                        if s > across_smax[i]:
+                            shear_math[i] += "\ns > across_smax     " + str(round(s,3)) + " > " + str(across_smax[i])
+                            shear_math[i] += "\nThe number of legs isn't adequete you need to increase the leg number by at least 1"
+                        else:
+                            shear_math[i] += "\ns ≤ across_smax     " + str(round(s,3)) + " ≤ " + str(across_smax[i]) + " GOOD"
+                    else:
+                        shear_math[i] += "\n" + str(round(V[i],3)) + " > " + str(round(V_analyze[i],3))
+                        smax1 = d_shear[i]/4
+                        shear_math[i] += "\nsmax1 = d/4     " + str(d_shear[i]) + "/4 = " + str(smax1) + " in"
+                        smax2 = 12
+                        shear_math[i] += "\nsmax2 = 12 in"
+                        smax1 = min(smax1,smax2)
+                        shear_math[i] += "\nsmax = " + str(smax1) + " in"
+                        s = b-2*cover-Legs*0.5*shear_rebar_diameter
+                        shear_math[i] += "\n Does the number of legs work"
+                        shear_math[i] += "\ns = b-2*cover-Legs*0.5*ds     " + str(b) +"-2*" + str(cover) + "-" + str(Legs) + "*0.5*" + str(shear_rebar_diameter) + " = " + str(round(s,3)) + " in" 
+                        across_smax1 = d[i]/2
+                        shear_math[i] += "\nacross_smax1 = d/2     " + str(d[i]) + "/2 = " + str(across_smax1) + " in"
+                        across_smax2 = 12
+                        shear_math[i] += "\nacross_smax2 = 12 in"
+                        across_smax[i] = min(across_smax1,across_smax2)
+                        shear_math[i] += "\nacross_smax = " + str(across_smax[i]) + " in"
+                        if s > across_smax[i]:
+                            shear_math[i] += "\ns > across_smax     " + str(round(s,3)) + " > " + str(across_smax[i])
+                            shear_math[i] += "\nThe number of legs isn't adequete you need to increase the leg number by at least 1"
+                        else:
+                            shear_math[i] += "\ns ≤ across_smax     " + str(round(s,3)) + " ≤ " + str(across_smax[i]) + " GOOD"
+                    Av = shear_rebar_area*Legs
+                    shear_math[i] += "\nAv = " + str(shear_rebar_area) + "*" + str(Legs) + " = " + str(Av) + " in^2"
+                    smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
+                    shear_math[i] += "\nsmax1 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
+                    smax3 = Av*fyt*1000/(50*b)
+                    shear_math[i] += "\nsmax2 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
+                    smax[i] = min(smax1,smax2,smax3)
+                    shear_math[i] += "\nsmax = " + str(round(smax[i],3)) + " in"
+                    smax[i] = round(smax[i]-0.5)
+                    shear_math[i] += "\nTherefore smax = " + str(smax[i]) + " in"
+                
 
 
 
