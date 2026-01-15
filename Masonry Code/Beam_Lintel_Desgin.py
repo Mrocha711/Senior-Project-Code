@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import math
 import pandas as pd
 import sys
+from MasonryColumnBase import Block
 # imports end --------------------------------------------------------------------------------
 
 
@@ -93,6 +94,7 @@ gap = 2.5 # in
 
 # vertical spacing, units inches
 space = 24 #in
+
 
 # DO NOT CHANGE ANYTHING FOLLOWING!!!-----------------------------------------------------
 
@@ -471,9 +473,9 @@ while count1 == 0:
             
             
             
+
            
-           
-           
+
             
                     
 

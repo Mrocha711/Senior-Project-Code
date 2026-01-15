@@ -18,7 +18,7 @@ types = np.array(["M","S","N"])
 
 
 # Classes
-class block:
+class Block:
     def __init__(self, thickness , CMU_size , mortar_type):
         
         self.thickness = thickness
@@ -35,7 +35,7 @@ class block:
 
 
 # Testing code
-b1 = block(8, "8x8x16","N")
+b1 = Block(8, "8x8x16","N")
 print(b1.block_height)
 
 #class column: 
