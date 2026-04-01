@@ -9,13 +9,16 @@ Created on Sat Oct 11 17:22:01 2025
 
 # imports
 import numpy as np
+import pandas as pd
 
-
-
-# Global Variables
+# Global Intializations 
 mortar_joint_size = 0.375
 types = np.array(["M","S","N"])
 
+rebar_dataframe = pd.read_excel("Masonry_Tables.xlsx", sheet_name="Rebar_Size")
+fr_beam_dataframe = pd.read_excel("Masonry_Tables.xlsx", sheet_name="fr_beam", index_col=0)
+net_area_comp_strength_clay_dataframe = pd.read_excel("Masonry_Tables.xlsx", sheet_name="net_area_comp_strength_clay")
+net_area_comp_strength_concrete_dataframe = pd.read_excel("Masonry_Tables.xlsx", sheet_name="net_area_comp_strength_concrete")
 
 # Classes
 class Block:
@@ -29,23 +32,24 @@ class Block:
         if self.block_height or self.block_width or self.block_length < 4:
             size_factor = 0.85
             
-        
-        # import masonry table
         # Table gives relationship between net compressive strength of masonry and mortar strength
-
-
-# Testing code
+        self.mortar_type = mortar_type
+        
+        
+# Testing code DELETE LATER
 b1 = Block(8, "8x8x16","N")
 print(b1.block_height)
 
-#class column: 
-#    def __init__(self, block , height , grouting  ):
-        
+class Column: 
+    def __init__(self, user_input_block , user_input_height , user_input_grouting , f_m_overwrite ):
+        #height
+        height = user_input_block.block_height
+        #thickness 
+        thickness = user_input_block.thickness
+        # grouting
+        # fr_beam_dataframe.user_input_block.mortar_type
+        # how to do we get to get user_input_grouting
 
-# height
-# thickness
-# grouting
-# 
 
 # Masonry Block
 # f'm
@@ -65,3 +69,25 @@ print(b1.block_height)
 # COLUMN ANALYSIS
 
 # Dimension limits
+# thickness >= 8"
+# h/r < 99
+# course Length < 6t
+
+
+#  P-M interaction code (import from seperate code block)
+
+# compare P-M interaction to actual 
+
+# make a user_input_block code snippet
+
+# user_input_block = Block(a , b ,c )
+# user_input_grouting -> dropdown menu to choose grouting options out of the possible four
+
+
+# Resources
+# https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html
+# chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://structurepoint.org/pdfs/manuals/spcolumn-manual.pdf
+# https://www.calctree.com/resources/interaction-diagram
+# https://docs.masonryanalysisstructuralsystems.com/walls/a-complete-wall-design/
+# https://docs.masonryanalysisstructuralsystems.com/walls/p-m-interaction-diagram/#P-M_Interaction_Diagram_Reinforced_Masonry
+
