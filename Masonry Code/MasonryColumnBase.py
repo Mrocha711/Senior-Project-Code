@@ -40,15 +40,26 @@ class Block:
 b1 = Block(8, "8x8x16","N")
 print(b1.block_height)
 
-class Column: 
+class Column: #element_dataframe
     def __init__(self, user_input_block , user_input_height , user_input_grouting , f_m_overwrite ):
         #height
-        height = user_input_block.block_height
+        self.height = user_input_block.block_height
         #thickness 
-        thickness = user_input_block.thickness
+        self.thickness = user_input_block.thickness
+        
         # grouting
-        # fr_beam_dataframe.user_input_block.mortar_type
-        # how to do we get to get user_input_grouting
+        # fr_beam_dataframe.user_input_block.mortar_type (amount like partially grouted, type like mortar type)
+        self.grouting = fr_beam_dataframe.loc[str(user_input_grouting)].user_input_block.mortar_type
+        
+        self.courses = #read user input of amount of masonry courses used
+        self.f_m = 2 #ksi ?
+        
+        # Reinforcement properties
+        # TODO how do get visual input from user ie block dwg
+        self.f_y = 60 #ksi should apply user input for rebar?
+        self.A_st = # user_reinf_input_num_bars * total_bar_area based on rebar_dataframe
+        
+        
 
 
 # Masonry Block
@@ -73,8 +84,10 @@ class Column:
 # h/r < 99
 # course Length < 6t
 
+# 6" spacing limit between unsupported  bars TMS 5.4.1.4
 
-#  P-M interaction code (import from seperate code block)
+
+#  P-M interaction code (import from seperate file)
 
 # compare P-M interaction to actual 
 
