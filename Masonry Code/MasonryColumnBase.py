@@ -56,7 +56,7 @@ class Column: #element_dataframe
         
         # Reinforcement properties
         # TODO how do get visual input from user ie block dwg
-        self.f_y = 60 #ksi should apply user input for rebar?
+        self.f_y = 60 #ksi should apply user input for rebar ?
         self.A_st = # user_reinf_input_num_bars * total_bar_area based on rebar_dataframe
         
         
