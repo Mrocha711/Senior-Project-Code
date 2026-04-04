@@ -68,4 +68,4 @@ def newmarks_average( beam_type, p, w, L):
     plt.ylabel("Moment (K-ft)")
     # Show the plot
     plt.show()      
-        
+    return V, M
