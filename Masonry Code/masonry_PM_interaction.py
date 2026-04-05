@@ -106,8 +106,17 @@ def createPM_masonry(masonry_block, reinf_boolean, element_dataframe):
 
     
     # compute the balance point
-    
+    C_b = 0.547 *  element_dataframe.block_thickness
+    C_m_balanced = 0.64 * f_m * C_b * masonry_block.thickness
     # interpolate between the balance point and the M_n point and P_n point based on strain
+    for layer_depth in element_dataframe.reinf_depth:
+        # compute: e_layer[i] = e_m * (layer_depth[i] - c)/c
+        e_layer = e_m * (layer_depth - c)/c
+        # compute: F_s[i] = e_m[i] * A_s * f_y
+        f_s_layer = e_layer * A_st * f_y
+        #if greater than A_s*f_y , set equal to A_s*f_Y
+        if (f_s_layer > A_st*f_y):
+            f_s_layer = A_st*f_y
 
     
     #return P_m diagram data
