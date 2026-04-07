@@ -58,6 +58,7 @@ class MultiDropDialog(QDialog):
         self.reject()
 
 def MultiDrop(questions, options_list):
+    app = QApplication.instance() or QApplication(sys.argv)
     dialog = MultiDropDialog(questions, options_list)
     dialog.exec_()
     if dialog.answers is None:
@@ -94,6 +95,7 @@ class ChoiceDialog(QDialog):
         self.reject()  # Close the dialog and mark it as rejected
 
 def choice(question, options):
+    app = QApplication.instance() or QApplication(sys.argv)
     dialog = ChoiceDialog(question, options)
     dialog.exec_()  # This blocks until the dialog is closed
     if dialog.selected_option is None:
@@ -143,6 +145,7 @@ class MultiInputDialog(QDialog):
 
 
 def get_inputs():
+    app = QApplication.instance() or QApplication(sys.argv)
     dialog = MultiInputDialog()
     if dialog.exec_() == QDialog.Accepted:
         return dialog.results  # Return all answers as a list
