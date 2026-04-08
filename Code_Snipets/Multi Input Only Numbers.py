@@ -46,6 +46,7 @@ class MultiInputDialog(QDialog):
 
 
 def get_inputs():
+    app = QApplication.instance() or QApplication(sys.argv)
     dialog = MultiInputDialog()
     if dialog.exec_() == QDialog.Accepted:
         return dialog.results  # Return all answers as a list
