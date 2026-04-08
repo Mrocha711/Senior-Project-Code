@@ -51,13 +51,13 @@ class Column: #element_dataframe
         # fr_beam_dataframe.user_input_block.mortar_type (amount like partially grouted, type like mortar type)
         self.grouting = fr_beam_dataframe.loc[str(user_input_grouting)].user_input_block.mortar_type
         
-        self.courses = #read user input of amount of masonry courses used
+        self.courses = 2 #read user input of amount of masonry courses used
         self.f_m = 2 #ksi ?
         
         # Reinforcement properties
         # TODO how do get visual input from user ie block dwg
         self.f_y = 60 #ksi should apply user input for rebar ?
-        self.A_st = # user_reinf_input_num_bars * total_bar_area based on rebar_dataframe
+        self.A_st = 10 # user_reinf_input_num_bars * total_bar_area based on rebar_dataframe
         
         
 
