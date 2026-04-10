@@ -652,4 +652,37 @@ if beam_type == "Singely Reinforced Known Dimensions":
                 shear_math[i] += "\nsmax = " + str(round(smax[i],3)) + " in"
                 smax[i] = round(smax[i]-0.5)
                 shear_math[i] += "\nTherefore smax = " + str(smax[i]) + " in"
-            
+    else:
+        # creating V along whole beam
+        number_of_x = round(L*12+1)
+        x_line = np.zeros(number_of_x)
+        V_of_beam = np.zeros(number_of_x)
+        for i in range(number_of_x):
+            x_line[i] = i/12
+            if i == number_of_x-1:
+                x_line[i] = L
+            V_of_beam[i] += W*(L/2-x_line[i])
+        x_change = np.zeros((len(d_shear),3))
+        for r in range(len(d_shear)):
+            x_change[r,0] = -phiv_Vc[r]/(W)+L/2
+            x_change[r,1] = -No_Stirrup[r]/(W)+L/2
+        # bands being set up
+        band_counter = np.ones(len(d_shear))
+        for r in range(len(d_shear)):
+            for col in range(3):
+                if x_change[r,col] > 0:
+                    band_counter[r] +=1     
+        bands = int(max(band_counter))
+        spacing = np.zeros(len(d_shear),bands)
+        for r in range(len(d_shear)):
+            for col in range(3):
+                if x_change[r,col] > 0:
+                    smax1 = d_shear[r]/4
+                    shear_math[i] += "\nsmax1 = d/4     " + str(d_shear[i]) + "/4 = " + str(smax1) + " in"
+                    smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
+                    shear_math[i] += "\nsmax2 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
+                    smax3 = Av*fyt*1000/(50*b)
+                    shear_math[i] += "\nsmax3 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
+                    smax4 = 12
+                    shear_math[i] += "\nsmax4 = 12 in"
+                    
