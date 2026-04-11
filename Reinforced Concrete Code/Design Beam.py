@@ -481,10 +481,12 @@ if beam_type == "Singely Reinforced Known Dimensions":
         if d[i] != 0:
             counter +=1
     d_shear = np.zeros(counter)
+    working_bar = np.zeros(counter)
     placement = 0
     for i in range(len(flexure_rebar)):
         if d[i] != 0:
             d_shear[placement] = d[i]
+            working_bar[placement] = flexure_rebar[i] 
             placement +=1
     Vu_d = np.zeros(counter)
     shear_math = [""]*counter
@@ -654,18 +656,26 @@ if beam_type == "Singely Reinforced Known Dimensions":
                 shear_math[i] += "\nTherefore smax = " + str(smax[i]) + " in"
     else:
         # creating V along whole beam
-        number_of_x = round(L*12+1)
+        if B_type == "Simply Supported":
+            number_of_x = round(L/2*12+1)
+        elif B_type == "Cantilever":
+            number_of_x = round(L*12+1)
         x_line = np.zeros(number_of_x)
         V_of_beam = np.zeros(number_of_x)
         for i in range(number_of_x):
             x_line[i] = i/12
             if i == number_of_x-1:
                 x_line[i] = L
-            V_of_beam[i] += W*(L/2-x_line[i])
+            if B_type == "Simply Supported":
+                V_of_beam[i] += W*(L/2-x_line[i])
+            elif B_type == "Cantilever":
+                V[i] += -W*x_line[i]
         x_change = np.zeros((len(d_shear),3))
         for r in range(len(d_shear)):
             x_change[r,0] = -phiv_Vc[r]/(W)+L/2
+            shear_math[r] += "\nL1 = -ϕvVc/(W)+L/2     -" + str(phiv_Vc) + "/" + str(W) + "+" + str(L) + "/2 = " + str(x_change[r,0]) + " ft"
             x_change[r,1] = -No_Stirrup[r]/(W)+L/2
+            shear_math[r] += "\nL1 = -No_stirrup/(W)+L/2     -" + str(No_Stirrup) + "/" + str(W) + "+" + str(L) + "/2 = " + str(x_change[r,1]) + " ft"
         # bands being set up
         band_counter = np.ones(len(d_shear))
         for r in range(len(d_shear)):
@@ -673,16 +683,101 @@ if beam_type == "Singely Reinforced Known Dimensions":
                 if x_change[r,col] > 0:
                     band_counter[r] +=1     
         bands = int(max(band_counter))
-        spacing = np.zeros(len(d_shear),bands)
+        spacing = np.zeros((len(d_shear),bands))
         for r in range(len(d_shear)):
+            cur_band = 0
+            Av = shear_rebar_area*Legs
+            shear_math[r] += "\nAv = " + str(shear_rebar_area) + "*" + str(Legs) + " = " + str(Av) + " in^2"
             for col in range(3):
-                if x_change[r,col] > 0:
-                    smax1 = d_shear[r]/4
-                    shear_math[i] += "\nsmax1 = d/4     " + str(d_shear[i]) + "/4 = " + str(smax1) + " in"
-                    smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
-                    shear_math[i] += "\nsmax2 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
-                    smax3 = Av*fyt*1000/(50*b)
-                    shear_math[i] += "\nsmax3 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
-                    smax4 = 12
-                    shear_math[i] += "\nsmax4 = 12 in"
-                    
+                if bands == 3:
+                    if x_change[r,col] > 0 and cur_band == 0:
+                        smax1 = d_shear[r]/4
+                        shear_math[r] += "\nsmax1 = d/4     " + str(d_shear[r]) + "/4 = " + str(smax1) + " in"
+                        smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
+                        shear_math[r] += "\nsmax2 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
+                        smax3 = Av*fyt*1000/(50*b)
+                        shear_math[r] += "\nsmax3 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
+                        smax4 = 12
+                        shear_math[r] += "\nsmax4 = 12 in"
+                        spacing[r,cur_band] = int(min(smax1,smax2,smax3,smax4))
+                        cur_band += 1
+                    elif x_change[r,col] > 0 and cur_band == 1:
+                        smax1 = d_shear[r]/2
+                        shear_math[r] += "\nsmax1 = d/2     " + str(d_shear[r]) + "/2 = " + str(smax1) + " in"
+                        smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
+                        shear_math[r] += "\nsmax2 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
+                        smax3 = Av*fyt*1000/(50*b)
+                        shear_math[r] += "\nsmax3 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
+                        smax4 = 24
+                        shear_math[r] += "\nsmax4 = 24 in"
+                        spacing[r,cur_band] = int(min(smax1,smax2,smax3,smax4))
+                        cur_band += 1
+                elif bands == 2:
+                    if x_change[r,col] > 0:
+                        smax1 = d_shear[r]/4
+                        shear_math[r] += "\nsmax1 = d/4     " + str(d_shear[r]) + "/4 = " + str(smax1) + " in"
+                        smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
+                        shear_math[r] += "\nsmax2 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
+                        smax3 = Av*fyt*1000/(50*b)
+                        shear_math[r] += "\nsmax3 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
+                        smax4 = 12
+                        shear_math[r] += "\nsmax4 = 12 in"
+                        spacing[r,cur_band] = int(min(smax1,smax2,smax3,smax4))
+                        shear_math[r] += "\nsmax = " + str(spacing[r,cur_band])
+                        cur_band += 1
+            # finalizing spaces and lengths
+            Ls_S = x_change
+            for r in range(len(d_shear)):
+                if bands == 3:
+                    Ls_S[r,0] = round(x_change[r,0]*12/spacing[r,0]+.5,0)*spacing[r,0]
+                    shear_math[r] += "\nLength1 = next_whole_number(l1*12/s1)*s1     next_whole_number(l" + str(x_change[r,0]) + "*12/" + str(spacing[r,0]) + ")*" + str(spacing[r,0]) + " = " + str(Ls_S[r,0]) + " in"
+                    Ls_S[r,1] = round(x_change[r,1]*12/spacing[r,1]+.5,0)*spacing[r,1]
+                    shear_math[r] += "\nLength1 = next_whole_number(l2*12/s2)*s2     next_whole_number(l" + str(x_change[r,1]) + "*12/" + str(spacing[r,1]) + ")*" + str(spacing[r,1]) + " = " + str(Ls_S[r,1]) + " in"
+                elif bands == 2:
+                    Ls_S[r,0] = round(x_change[r,0]*12/spacing[r,0]+.5,0)*spacing[r,0]
+                    shear_math[r] += "\nLength1 = next_whole_number(l1*12/s1)*s1     next_whole_number(l" + str(x_change[r,0]) + "*12/" + str(spacing[r,0]) + ")*" + str(spacing[r,0]) + " = " + str(Ls_S[r,0]) + " in"
+            #printing all math for Shear design
+            for i in range(len(d_shear)):
+                print(shear_math[i])
+            #quick shear overview
+            print("Shear Overview for " + str(Stirrup_size) + " with " + str(Legs) + ".")
+            for i in range(len(d_shear)):
+                if bands == 3:
+                    print(str(working_bar[i]) + ": Band1 = Stops at " + str(Ls_S[i,0]) + " in spaced at " + str(spacing[i,0]) + " in.")
+                    print("     Band2 = Stops at " + str(Ls_S[i,1]) + " in spaced at " + str(spacing[i,1]) + " in.")
+                    if B_type == "Simply Supported":
+                        print("     No stirrups required for remaining half of beam and the two halfs are mirrors of eachother.")
+                    elif B_type == "Cantilever":
+                        print("     No stirrups required for the rest of the beam")
+                elif bands == 2:
+                    print(working_bar[i] + ": Band1 = Stops at " + str(Ls_S[i,0]) + " in spaced at " + str(spacing[i,0]) + " in.")
+                    if B_type == "Simply Supported":
+                        print("     No stirrups required for remaining half of beam and the two halfs are mirrors of eachother.")
+                    elif B_type == "Cantilever":
+                        print("     No stirrups required for the rest of the beam")
+                elif load == "point load":
+                    print(str(working_bar[i]) + ": Only 1 Band spaced at " + str(smax[i]) + " in.")
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
