@@ -1,8 +1,0 @@
-libdir=/Users/alisaleh/miniforge3/lib
-includedir=/Users/alisaleh/miniforge3/include
-
-Name: libsolv
-Description: Library for solving packages
-Version: 0.7.36
-Libs: -L${libdir} -lsolv
-Cflags: -I${includedir}
