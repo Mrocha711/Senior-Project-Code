@@ -1,0 +1,14 @@
+{
+  "cxx_compiler": "clangxx",
+  "openssl": "3.5",
+  "CONDA_BUILD_SYSROOT": "/opt/conda-sdks/MacOSX11.0.sdk",
+  "c_stdlib_version": "11.0",
+  "c_compiler": "clang",
+  "krb5": "1.21",
+  "target_platform": "osx-arm64",
+  "c_compiler_version": "19",
+  "cxx_compiler_version": "19",
+  "c_stdlib": "macosx_deployment_target",
+  "channel_targets": "conda-forge main",
+  "__osx": "__osx >=11.0"
+}

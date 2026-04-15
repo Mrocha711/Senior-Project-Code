@@ -1,0 +1,66 @@
+# This file created by conda-build 26.1.0
+# ------------------------------------------------
+
+package:
+  name: libxml2-16
+  version: 2.15.2
+source:
+  url: https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.15.2/libxml2-v2.15.2.tar.gz
+  sha256: 0380419e8edcafe8425cb39a84cda3a477672ca66793b15545394eb0e4f6f47f
+build:
+  number: '0'
+  noarch: false
+  noarch_python: false
+  python_version_independent: false
+  string: h5ef1a60_0
+requirements:
+  build:
+    - clang_bootstrap_osx-arm64 19.1.7 h4c5f930_31
+    - macosx_deployment_target_osx-arm64 11.0 h214bdd9_7
+  host:
+    - icu 78.2 hef89b57_0
+    - libiconv 1.18 h23cfdf5_2
+    - liblzma 5.8.2 h8088a28_0
+    - liblzma-devel 5.8.2 h8088a28_0
+    - libzlib 1.3.1 h8359307_2
+    - zlib 1.3.1 h8359307_2
+  run_constrained:
+    - libxml2 2.15.2
+  run:
+    - __osx >=11.0
+    - icu >=78.2,<79.0a0
+    - libiconv >=1.18,<2.0a0
+    - liblzma >=5.8.2,<6.0a0
+    - libzlib >=1.3.1,<2.0a0
+test:
+  commands:
+    - test -f $PREFIX/lib/libxml2.16.dylib
+about:
+  home: http://xmlsoft.org/
+  license: MIT
+  license_family: MIT
+  license_file: Copyright
+  summary: The XML C parser and toolkit of Gnome
+  description: 'Though libxml2 is written in C a variety of language
+
+    bindings make it available in other environments.
+
+    '
+  doc_url: http://xmlsoft.org/html/index.html
+  doc_source_url: https://github.com/GNOME/libxml2/blob/master/doc/devhelp/index.html
+  dev_url: https://git.gnome.org/browse/libxml2/
+extra:
+  feedstock-name: libxml2
+  recipe-maintainers:
+    - gillins
+    - isuruf
+    - jakirkham
+    - jschueller
+    - msarahan
+    - ocefpaf
+    - scopatz
+  final: true
+  copy_test_source_files: true
+  flow_run_id: azure_20260305.1.1
+  remote_url: https://github.com/conda-forge/libxml2-feedstock
+  sha: a54dc45296317ec28a1da9191c04f0bcf9d4a4d3

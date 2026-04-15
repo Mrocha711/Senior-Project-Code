@@ -1,0 +1,25 @@
+{
+    "arch": "arm64",
+    "build": "h385eeb1_0",
+    "build_number": 0,
+    "channel": "https://conda.anaconda.org/conda-forge",
+    "depends": [
+        "__osx >=11.0",
+        "libcxx >=19",
+        "libedit >=3.1.20250104,<3.2.0a0",
+        "libedit >=3.1.20250104,<4.0a0",
+        "openssl >=3.5.5,<4.0a0"
+    ],
+    "fn": "krb5-1.22.2-h385eeb1_0.conda",
+    "license": "MIT",
+    "license_family": "MIT",
+    "md5": "e446e1822f4da8e5080a9de93474184d",
+    "name": "krb5",
+    "platform": "osx",
+    "sha256": "c0a0bf028fe7f3defcdcaa464e536cf1b202d07451e18ad83fdd169d15bef6ed",
+    "size": 1160828,
+    "subdir": "osx-arm64",
+    "timestamp": 1769770119811,
+    "url": "https://conda.anaconda.org/conda-forge/osx-arm64/krb5-1.22.2-h385eeb1_0.conda",
+    "version": "1.22.2"
+}

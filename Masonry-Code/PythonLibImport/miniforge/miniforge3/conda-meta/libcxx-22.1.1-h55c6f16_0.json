@@ -1,0 +1,73 @@
+{
+    "arch": "arm64",
+    "build": "h55c6f16_0",
+    "build_number": 0,
+    "channel": "https://conda.anaconda.org/conda-forge",
+    "depends": [
+        "__osx >=11.0"
+    ],
+    "extracted_package_dir": "/Users/alisaleh/miniforge3/pkgs/libcxx-22.1.1-h55c6f16_0",
+    "files": [
+        "lib/libc++.1.0.dylib",
+        "lib/libc++.1.dylib",
+        "lib/libc++.a",
+        "lib/libc++.dylib",
+        "lib/libc++experimental.a"
+    ],
+    "fn": "libcxx-22.1.1-h55c6f16_0.conda",
+    "license": "Apache-2.0 WITH LLVM-exception",
+    "license_family": "Apache",
+    "link": {
+        "source": "/Users/alisaleh/miniforge3/pkgs/libcxx-22.1.1-h55c6f16_0",
+        "type": 1
+    },
+    "md5": "7a290d944bc0c481a55baf33fa289deb",
+    "name": "libcxx",
+    "package_tarball_full_path": "/Users/alisaleh/miniforge3/pkgs/libcxx-22.1.1-h55c6f16_0.tar.bz2",
+    "paths_data": {
+        "paths": [
+            {
+                "_path": "lib/libc++.1.0.dylib",
+                "path_type": "hardlink",
+                "sha256": "7a00fa434cfbdb9077e01f8509568b6ed8e1d487f4a00bb019578b3695b15ad1",
+                "sha256_in_prefix": "7a00fa434cfbdb9077e01f8509568b6ed8e1d487f4a00bb019578b3695b15ad1",
+                "size_in_bytes": 1174304
+            },
+            {
+                "_path": "lib/libc++.1.dylib",
+                "path_type": "softlink",
+                "sha256_in_prefix": "7a00fa434cfbdb9077e01f8509568b6ed8e1d487f4a00bb019578b3695b15ad1",
+                "size_in_bytes": 1174304
+            },
+            {
+                "_path": "lib/libc++.a",
+                "path_type": "hardlink",
+                "sha256": "32afc85bff9bec8f823063719b93f495376b0e94ee4c900f93d1e88bc93f5d3f",
+                "sha256_in_prefix": "32afc85bff9bec8f823063719b93f495376b0e94ee4c900f93d1e88bc93f5d3f",
+                "size_in_bytes": 1683112
+            },
+            {
+                "_path": "lib/libc++.dylib",
+                "path_type": "softlink",
+                "sha256_in_prefix": "7a00fa434cfbdb9077e01f8509568b6ed8e1d487f4a00bb019578b3695b15ad1",
+                "size_in_bytes": 1174304
+            },
+            {
+                "_path": "lib/libc++experimental.a",
+                "path_type": "hardlink",
+                "sha256": "5979a056bb2d939887ca1de877cc24bfd1e75315e6a73f4b3fb90931a00e7967",
+                "sha256_in_prefix": "5979a056bb2d939887ca1de877cc24bfd1e75315e6a73f4b3fb90931a00e7967",
+                "size_in_bytes": 319096
+            }
+        ],
+        "paths_version": 1
+    },
+    "platform": "osx",
+    "requested_spec": "libcxx==22.1.1=h55c6f16_0",
+    "sha256": "3c8142cdd3109c250a926c492ec45bc954697b288e5d1154ada95272ffa21be8",
+    "size": 570281,
+    "subdir": "osx-arm64",
+    "timestamp": 1773203613980,
+    "url": "https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-22.1.1-h55c6f16_0.conda",
+    "version": "22.1.1"
+}

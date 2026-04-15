@@ -1,0 +1,118 @@
+# This file created by conda-build 26.1.0
+# ------------------------------------------------
+
+package:
+  name: libarchive
+  version: 3.8.6
+source:
+  url: https://github.com/libarchive/libarchive/archive/v3.8.6.tar.gz
+  sha256: 7d761de5d79e73eb3c573168f8c92400918f842528ffd8105f7033054017686f
+  patches:
+    - patches/0001-Add-lib-to-CMAKE_FIND_LIBRARY_PREFIXES-for-lzma.patch
+build:
+  string: gpl_h6fbacd7_100
+  run_exports:
+    - libarchive >=3.8.6,<3.9.0a0
+  number: 100
+requirements:
+  build:
+    - autoconf 2.72 pl5321had7229c_1
+    - automake 1.17 pl5321h694c41f_0
+    - ca-certificates 2026.2.25 hbd8a1cb_0
+    - cctools 1030.6.3 llvm19_1_h67a6458_4
+    - cctools_impl_osx-64 1030.6.3 llvm19_1_h7d82c7c_4
+    - cctools_impl_osx-arm64 1030.6.3 llvm19_1_h317eeb0_4
+    - cctools_osx-arm64 1030.6.3 llvm19_1_h0e16ad9_4
+    - clang 19.1.7 default_h1323312_8
+    - clang-19 19.1.7 default_h9399c5b_8
+    - clang_impl_osx-64 19.1.7 default_ha1a018a_8
+    - clang_impl_osx-arm64 19.1.7 h4c5f930_31
+    - clang_osx-arm64 19.1.7 h877a2d5_31
+    - compiler-rt 19.1.7 he914875_1
+    - compiler-rt_osx-64 19.1.7 h138dee1_1
+    - icu 78.2 h14c5de8_0
+    - ld64 956.6 llvm19_1_hc3792c1_4
+    - ld64_osx-64 956.6 llvm19_1_hcae3351_4
+    - ld64_osx-arm64 956.6 llvm19_1_hd5dc7e1_4
+    - libclang-cpp19.1 19.1.7 default_h9399c5b_8
+    - libcxx 22.1.1 h19cb2f5_0
+    - libiconv 1.18 h57a12c2_2
+    - libllvm19 19.1.7 h56e7563_2
+    - libltdl 2.4.3a h240833e_0
+    - liblzma 5.8.2 h11316ed_0
+    - libsigtool 0.1.3 hc0f2934_0
+    - libtool 2.5.4 h240833e_0
+    - libxml2 2.15.2 hd552753_0
+    - libxml2-16 2.15.2 h7a90416_0
+    - libzlib 1.3.1 hd23fc13_2
+    - llvm-openmp 22.1.0 h0d3cbff_0
+    - llvm-tools 19.1.7 hb0207f0_2
+    - llvm-tools-19 19.1.7 h879f4bc_2
+    - m4 1.4.21 hf3981d6_0
+    - macosx_deployment_target_osx-arm64 11.0 h214bdd9_7
+    - make 4.4.1 h00291cd_2
+    - ncurses 6.5 h0622a9a_3
+    - openssl 3.6.1 hb6871ef_1
+    - perl 5.32.1 7_h10d778d_perl5
+    - pkg-config 0.29.2 hf7e621a_1009
+    - sdkroot_env_osx-arm64 26.0 ha3f98da_7
+    - sigtool-codesign 0.1.3 hc0f2934_0
+    - tapi 1600.0.11.8 h8d8e812_0
+    - zstd 1.5.7 h3eecb57_6
+  host:
+    - bzip2 1.0.8 hd037594_9
+    - ca-certificates 2026.2.25 hbd8a1cb_0
+    - libcxx 22.1.1 h55c6f16_0
+    - libiconv 1.18 h23cfdf5_2
+    - liblzma 5.8.2 h8088a28_0
+    - liblzma-devel 5.8.2 h8088a28_0
+    - libxml2 2.14.6 h762f11a_3
+    - libxml2-16 2.14.6 h6967ea9_3
+    - libxml2-devel 2.14.6 h762f11a_3
+    - libzlib 1.3.1 h8359307_2
+    - lz4-c 1.10.0 h286801f_1
+    - lzo 2.10 h925e9cb_1002
+    - openssl 3.5.5 hd24854e_1
+    - zlib 1.3.1 h8359307_2
+    - zstd 1.5.7 hbf9d68e_6
+  run:
+    - __osx >=11.0
+    - bzip2 >=1.0.8,<2.0a0
+    - libiconv >=1.18,<2.0a0
+    - liblzma >=5.8.2,<6.0a0
+    - libxml2
+    - libxml2-16 >=2.14.6
+    - libzlib >=1.3.1,<2.0a0
+    - lz4-c >=1.10.0,<1.11.0a0
+    - lzo >=2.10,<3.0a0
+    - openssl >=3.5.5,<4.0a0
+    - zstd >=1.5.7,<1.6.0a0
+test:
+  files:
+    - test/hello_world.xar
+  commands:
+    - test -f "${PREFIX}/lib/pkgconfig/libarchive.pc"
+    - test -f "${PREFIX}/include/archive.h"
+    - test -f "${PREFIX}/include/archive_entry.h"
+    - test -f "${PREFIX}/lib/libarchive.a"
+    - test -f "${PREFIX}/lib/libarchive${SHLIB_EXT}"
+    - bsdcat --version
+    - bsdcpio --version
+    - bsdtar --version
+    - bsdtar -tf test/hello_world.xar
+about:
+  home: http://www.libarchive.org/
+  summary: Multi-format archive and compression library
+  license: BSD-2-Clause
+  license_file: COPYING
+  license_family: BSD
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - jjerphan
+    - ocefpaf
+  final: true
+  copy_test_source_files: true
+  flow_run_id: github_22960452201
+  remote_url: https://github.com/conda-forge/libarchive-feedstock
+  sha: 6011953a14028fcc2a441641c92dcb2ee78f1201

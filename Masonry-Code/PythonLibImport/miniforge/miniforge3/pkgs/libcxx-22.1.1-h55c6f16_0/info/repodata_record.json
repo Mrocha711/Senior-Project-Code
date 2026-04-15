@@ -1,0 +1,21 @@
+{
+    "arch": "arm64",
+    "build": "h55c6f16_0",
+    "build_number": 0,
+    "channel": "https://conda.anaconda.org/conda-forge",
+    "depends": [
+        "__osx >=11.0"
+    ],
+    "fn": "libcxx-22.1.1-h55c6f16_0.conda",
+    "license": "Apache-2.0 WITH LLVM-exception",
+    "license_family": "Apache",
+    "md5": "7a290d944bc0c481a55baf33fa289deb",
+    "name": "libcxx",
+    "platform": "osx",
+    "sha256": "3c8142cdd3109c250a926c492ec45bc954697b288e5d1154ada95272ffa21be8",
+    "size": 570281,
+    "subdir": "osx-arm64",
+    "timestamp": 1773203613980,
+    "url": "https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-22.1.1-h55c6f16_0.conda",
+    "version": "22.1.1"
+}

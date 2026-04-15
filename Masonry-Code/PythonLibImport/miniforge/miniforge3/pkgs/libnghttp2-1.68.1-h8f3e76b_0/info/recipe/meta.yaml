@@ -1,0 +1,108 @@
+# This file created by conda-build 26.1.0
+# ------------------------------------------------
+
+package:
+  name: libnghttp2
+  version: 1.68.1
+source:
+  url: https://github.com/nghttp2/nghttp2/releases/download/v1.68.1/nghttp2-1.68.1.tar.gz
+  sha256: ceb434c1f9dfe2a9d305b6b797786fb9227484dfa88508d14ca1c50263db55d3
+build:
+  run_exports:
+    - libnghttp2 >=1.68.1,<2.0a0
+  number: 0
+  string: h8f3e76b_0
+requirements:
+  build:
+    - ca-certificates 2026.2.25 hbd8a1cb_0
+    - cctools 1030.6.3 llvm19_1_h67a6458_4
+    - cctools_impl_osx-64 1030.6.3 llvm19_1_h7d82c7c_4
+    - cctools_impl_osx-arm64 1030.6.3 llvm19_1_h317eeb0_4
+    - cctools_osx-arm64 1030.6.3 llvm19_1_h0e16ad9_4
+    - clang 19.1.7 default_h1323312_8
+    - clang-19 19.1.7 default_h9399c5b_8
+    - clang_impl_osx-64 19.1.7 default_ha1a018a_8
+    - clang_impl_osx-arm64 19.1.7 h4c5f930_31
+    - clang_osx-arm64 19.1.7 h877a2d5_31
+    - clangxx 19.1.7 default_h9089c59_8
+    - clangxx_impl_osx-64 19.1.7 default_ha1a018a_8
+    - clangxx_impl_osx-arm64 19.1.7 ha2d6da0_31
+    - clangxx_osx-arm64 19.1.7 h877a2d5_31
+    - compiler-rt 19.1.7 he914875_1
+    - compiler-rt_osx-64 19.1.7 h138dee1_1
+    - icu 78.3 h25d91c4_0
+    - ld64 956.6 llvm19_1_hc3792c1_4
+    - ld64_osx-64 956.6 llvm19_1_hcae3351_4
+    - ld64_osx-arm64 956.6 llvm19_1_hd5dc7e1_4
+    - libclang-cpp19.1 19.1.7 default_h9399c5b_8
+    - libcxx 22.1.1 h19cb2f5_0
+    - libcxx-devel 19.1.7 h7c275be_2
+    - libcxx-headers 19.1.7 h707e725_2
+    - libiconv 1.18 h57a12c2_2
+    - libllvm19 19.1.7 h56e7563_2
+    - liblzma 5.8.2 h11316ed_0
+    - libsigtool 0.1.3 hc0f2934_0
+    - libxml2 2.15.2 hd552753_0
+    - libxml2-16 2.15.2 h7a90416_0
+    - libzlib 1.3.1 hd23fc13_2
+    - llvm-openmp 22.1.0 h0d3cbff_0
+    - llvm-tools 19.1.7 hb0207f0_2
+    - llvm-tools-19 19.1.7 h879f4bc_2
+    - macosx_deployment_target_osx-arm64 11.0 h214bdd9_7
+    - make 4.4.1 h00291cd_2
+    - ncurses 6.5 h0622a9a_3
+    - openssl 3.6.1 hb6871ef_1
+    - pkg-config 0.29.2 hf7e621a_1009
+    - sdkroot_env_osx-arm64 26.0 ha3f98da_7
+    - sigtool-codesign 0.1.3 hc0f2934_0
+    - tapi 1600.0.11.8 h8d8e812_0
+    - zstd 1.5.7 h3eecb57_6
+  host:
+    - c-ares 1.34.6 hc919400_0
+    - ca-certificates 2026.2.25 hbd8a1cb_0
+    - libcxx 22.1.1 h55c6f16_0
+    - libev 4.33 h93a5062_2
+    - libzlib 1.3.1 h8359307_2
+    - openssl 3.5.5 hd24854e_1
+    - zlib 1.3.1 h8359307_2
+  run:
+    - __osx >=11.0
+    - c-ares >=1.34.6,<2.0a0
+    - libcxx >=19
+    - libev >=4.33,<4.34.0a0
+    - libev >=4.33,<5.0a0
+    - libzlib >=1.3.1,<2.0a0
+    - openssl >=3.5.5,<4.0a0
+test:
+  commands:
+    - nghttp -nv https://nghttp2.org
+    - test ! -f ${PREFIX}/lib/libnghttp2.a
+about:
+  home: http://github.com/nghttp2/nghttp2
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  summary: This is an implementation of Hypertext Transfer Protocol version 2.
+  description: 'This is an implementation of the Hypertext Transfer Protocol version
+    2 in C.
+
+
+    The framing layer of HTTP/2 is implemented as a reusable C library. On top
+
+    of that, we have implemented an HTTP/2 client, server and proxy. We have
+
+    also developed load test and benchmarking tools for HTTP/2.
+
+    '
+  doc_url: https://nghttp2.org/documentation/
+  dev_url: https://github.com/nghttp2/nghttp2
+extra:
+  recipe-maintainers:
+    - cpaulik
+    - mariusvniekerk
+    - wolfv
+  final: true
+  copy_test_source_files: true
+  flow_run_id: azure_20260318.4.1
+  remote_url: https://github.com/conda-forge/nghttp2-feedstock
+  sha: 2ecae45e846015421817190f983206a523835523
