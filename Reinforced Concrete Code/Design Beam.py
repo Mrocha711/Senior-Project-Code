@@ -202,7 +202,7 @@ elif beam_type == "Singely Reinforced Unknown Dimensions":
     P_trial_1 = 1.4*P_d
     print("P_trial_1 = 1.4*P_d     1.4*" + str(P_d) + " = " + str(P_trial_1) + " k")
     w_trial_2 = 1.2*(w_d+wg)+1.6*w_l
-    print("w_trial_1 = 1.2*(w_d+wg)+1.6*w_l     1.2*(" + str(wg) + "+" + str(w_d) + ") + 1.6*" + str(w_l) + " = " + str(w_trial_2) + "klf")
+    print("w_trial_2 = 1.2*(w_d+wg)+1.6*w_l     1.2*(" + str(wg) + "+" + str(w_d) + ") + 1.6*" + str(w_l) + " = " + str(w_trial_2) + "klf")
     P_trial_2 = 1.2*P_d+1.6*P_l
     print("P_trial_1 = 1.2*P_d+1.6*P_l     1.2*" + str(P_d) + "+1.6*" + str(P_l) + " = " + str(P_trial_2) + " k")
     if B_type == "Simply Supported":
@@ -251,7 +251,7 @@ elif beam_type == "Singely Reinforced Unknown Dimensions":
     w_d = w_d_tot
 # finding values of Vu,Mu, and partial deflection
 if B_type == "Simply Supported":
-    if load == "point load":
+    if load == "point load" and beam_type == "Singely Reinforced Known Dimensions":
         # load combos
         P1 = 1.6*P_d
         print("P1 = 1.6D     1.6*" + str(P_d) + " = " + str(P1) + " kips")
@@ -287,8 +287,32 @@ if B_type == "Simply Supported":
         print("Δ_iD*EI = 5*" + str(w_d) + "*" + str(L) + "^4*12^3/(384) = " + str(round(del_iD_EI,3)))
         del_iD_L_EI = 5*(w_d+w_l)*L**4*12**3/(384)
         print("Δ_iD_L*EI = 5*(" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(384) = " + str(round(del_iD_L_EI,3)))
+        P = 0
+    elif load == "point load" and beam_type == "Singely Reinforced Unknown Dimensions":
+        #finding Mu for both cases then getting max Mu
+        W1 = 1.4*w_d
+        print("W1 = 1.4*(w_d)     1.4*(" + str(wg) + ") = " + str(W1) + "klf")
+        P1 = 1.4*P_d
+        print("P1 = 1.4*P_d     1.4*" + str(P_d) + " = " + str(P1) + " k")
+        W2 = 1.2*(w_d)+1.6*w_l
+        print("W2 = 1.2*(w_d)+1.6*w_l     1.2*(" + str(wg) + ") + 1.6*" + str(w_l) + " = " + str(W2) + "klf")
+        P2 = 1.2*P_d+1.6*P_l
+        print("P2 = 1.2*P_d+1.6*P_l     1.2*" + str(P_d) + "+1.6*" + str(P_l) + " = " + str(P2) + " k")
+        M1 = W1*L**2/8+P1*L/4
+        print("M1 = W1*L^2/8+P1*L/4     " + str(W1) + "*" + str(L) + "^2/8+" + str(P1) + "*" + str(L) + "/4 = " + str(M1) + " kft")
+        M2 = W2*L**2/8+P2*L/4
+        print("M2 = W2*L^2/8+P2*L/4     " + str(W2) + "*" + str(L) + "^2/8+" + str(P2) + "*" + str(L) + "/4 = " + str(M2) + " kft")
+        Mu = max(M1,M2)
+        if Mu == M1:
+            Vu = W1*L/2 + P1/2
+            P = P1
+            W = W1
+        else:
+            Vu = W2*L/2 + P2/2
+            P = P2
+            W = W2
 elif B_type == "Cantilever":
-    if load == "point load":
+    if load == "point load" and beam_type == "Singely Reinforced Known Dimensions":
         # load combos
         P1 = 1.6*P_d
         print("P1 = 1.6D     1.6*" + str(P_d) + " = " + str(P1) + " kips")
@@ -323,6 +347,30 @@ elif B_type == "Cantilever":
         print("Δ_iD*EI = " + str(w_d) + "*" + str(L) + "^4*12^3/(8) = " + str(round(del_iD_EI,3)) + " in")
         del_iD_L_EI = (w_d+w_l)*L**4*12**3/(8)
         print("Δ_iD_L*EI = (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(8) = " + str(round(del_iD_L_EI,3)) + " in")
+        P = 0
+    elif load == "point load" and beam_type == "Singely Reinforced Unknown Dimensions":
+        #finding Mu for both cases then getting max Mu
+        W1 = 1.4*w_d
+        print("W1 = 1.4*(w_d)     1.4*(" + str(wg) + ") = " + str(W1) + "klf")
+        P1 = 1.4*P_d
+        print("P1 = 1.4*P_d     1.4*" + str(P_d) + " = " + str(P1) + " k")
+        W2 = 1.2*(w_d)+1.6*w_l
+        print("W2 = 1.2*(w_d)+1.6*w_l     1.2*(" + str(wg) + ") + 1.6*" + str(w_l) + " = " + str(W2) + "klf")
+        P2 = 1.2*P_d+1.6*P_l
+        print("P2 = 1.2*P_d+1.6*P_l     1.2*" + str(P_d) + "+1.6*" + str(P_l) + " = " + str(P2) + " k")
+        M1 = W1*L**2/2+P1*L
+        print("M1 = W1*L^2/2+P1*L     " + str(W1) + "*" + str(L) + "^2/2+" + str(P1) + "*" + str(L) + " = " + str(M1) + " kft")
+        M2 = W2*L**2/2+P2*L
+        print("M2 = W2*L^2/8+P2*L/4     " + str(W2) + "*" + str(L) + "^2/2+" + str(P2) + "*" + str(L) + " = " + str(M2) + " kft")
+        Mu = max(M1,M2)
+        if Mu == M1:
+            Vu = W1*L/2 + P1/2
+            P = P1
+            W = W1
+        else:
+            Vu = W2*L/2 + P2/2
+            P = P2
+            W = W2
 # find required area of steel
 phif = 0.9
 print("φf = 0.9")
@@ -599,7 +647,7 @@ V = np.zeros(counter)
 V_analyze = np.zeros(counter)
 smax = np.zeros(counter)
 across_smax = np.zeros(counter)
-if load == "point load":
+if load == "point load" and beam_type == "Singely Reinforced Known Dimensions":
     bands = 1
     for i in range(counter):
         if Vu_d[i] <= No_Stirrup[i]:
@@ -741,23 +789,41 @@ else:
         if i == number_of_x-1:
             x_line[i] = L
         if B_type == "Simply Supported":
-            V_of_beam[i] += W*(L/2-x_line[i])
+            V_of_beam[i] += W*(L/2-x_line[i])+P*x_line[i]/2
         elif B_type == "Cantilever":
-            V[i] += -W*x_line[i]
+            V_of_beam[i] += -W*x_line[i]-P*x_line[i]
     x_change = np.zeros((len(d_shear),3))
     for r in range(len(d_shear)):
-        x_change[r,0] = -phiv_Vc[r]/(W)+L/2
-        shear_math[r] += "\nL1 = -ϕvVc/(W)+L/2     -" + str(phiv_Vc) + "/" + str(W) + "+" + str(L) + "/2 = " + str(x_change[r,0]) + " ft"
-        x_change[r,1] = -No_Stirrup[r]/(W)+L/2
-        shear_math[r] += "\nL1 = -No_stirrup/(W)+L/2     -" + str(No_Stirrup) + "/" + str(W) + "+" + str(L) + "/2 = " + str(x_change[r,1]) + " ft"
-    # bands being set up
+        if B_type == "Simply Supported":
+            x_counter = 0
+            counter = 0
+            while counter == 0:
+                if V_of_beam[x_counter] > phiv_Vc[r]:
+                    x_change[r,0] = x_line[x_counter]
+                    x_counter += 1
+                    counter += 1
+                else:
+                    x_counter += 1
+            while counter == 1:
+                if V_of_beam[x_counter] > No_Stirrup[r]:
+                    x_change[r,1] = x_line[x_counter]
+                    x_counter += 1
+                    counter += 1
+                else:
+                    x_counter += 1
+        elif B_type == "Cantilever":
+            x_change[r,0] = -phiv_Vc[r]/(W+P)
+            shear_math[r] += "\nL1 = -ϕvVc/(W+P)     -" + str(phiv_Vc) + "/(" + str(W) + "+" + str(P) + ") = " + str(x_change[r,0]) + " ft"
+            x_change[r,1] = -No_Stirrup[r]/(W+P)
+            shear_math[r] += "\nL1 = -No_stirrup/(W+P)     -" + str(No_Stirrup) + "/(" + str(W) + "+" + str(P) + ") = " + str(x_change[r,1]) + " ft"
+        # bands being set up
     band_counter = np.ones(len(d_shear))
     for r in range(len(d_shear)):
         for col in range(3):
             if x_change[r,col] > 0:
                 band_counter[r] +=1     
     bands = int(max(band_counter))
-    spacing = np.zeros((len(d_shear),bands))
+    spacing = np.ones((len(d_shear),bands))
     for r in range(len(d_shear)):
         cur_band = 0
         Av = shear_rebar_area*Legs
@@ -800,16 +866,18 @@ else:
                     shear_math[r] += "\nsmax = " + str(spacing[r,cur_band])
                     cur_band += 1
         # finalizing spaces and lengths
-        Ls_S = x_change
+        Ls_S = np.zeros((len(d_shear),bands))
         for r in range(len(d_shear)):
             if bands == 3:
                 Ls_S[r,0] = round(x_change[r,0]*12/spacing[r,0]+.5,0)*spacing[r,0]
                 shear_math[r] += "\nLength1 = next_whole_number(l1*12/s1)*s1     next_whole_number(l" + str(x_change[r,0]) + "*12/" + str(spacing[r,0]) + ")*" + str(spacing[r,0]) + " = " + str(Ls_S[r,0]) + " in"
                 Ls_S[r,1] = round(x_change[r,1]*12/spacing[r,1]+.5,0)*spacing[r,1]
                 shear_math[r] += "\nLength1 = next_whole_number(l2*12/s2)*s2     next_whole_number(l" + str(x_change[r,1]) + "*12/" + str(spacing[r,1]) + ")*" + str(spacing[r,1]) + " = " + str(Ls_S[r,1]) + " in"
+                Ls_S[r,2] = 0
             elif bands == 2:
                 Ls_S[r,0] = round(x_change[r,0]*12/spacing[r,0]+.5,0)*spacing[r,0]
                 shear_math[r] += "\nLength1 = next_whole_number(l1*12/s1)*s1     next_whole_number(l" + str(x_change[r,0]) + "*12/" + str(spacing[r,0]) + ")*" + str(spacing[r,0]) + " = " + str(Ls_S[r,0]) + " in"
+                Ls_S[r,1] = 0
         #printing all math for Shear design
         for i in range(len(d_shear)):
             print(shear_math[i])
@@ -1008,6 +1076,9 @@ for i in range(len(d_shear)):
 print()
 print()
 print("Overview for Beams Designed")
+if beam_type == "Singely Reinforced Unknown Dimensions":
+    print("The beam dimensions are, b: " + str(b) + " in")
+    print("                         h: " + str(h) + " in")
 for i in range(len(d_shear)):
     print("For the beam with " + str(working_bar_number[i]) + " #" + str(working_bar[i]) + "bars: The D/C ratio:" + str(round(dc_ratio[i],3)))
     if bands == 3:
