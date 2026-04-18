@@ -235,7 +235,6 @@ elif beam_type == "Singely Reinforced Unknown Dimensions":
     print("R = ω*f'c/1000*(1-0.59*ω)     " + str(omega) + "*" + str(fpc) + "/1000*(1-0.59*" + str(omega) + ") = " + str(R))
     d_for_h = (M_trial*12/(0.7*0.9*R))**(1/3)
     print("d = (M_u*12/(0.7*ϕ_f*R))^(1/3)     (" + str(M_trial) + "*12/(0.7*0.9*" + str(R) + "))^(1/3) = " + str(d_for_h) + " in")
-    d_for_h = 13.3333333
     b = M_trial*12/(0.9*R*d_for_h**2)
     print("b = M_u*12/(ϕ_f*R*d^2)     " + str(M_trial) + "*12/(0.9*" + str(R) + "*" + str(d_for_h) + "^2) = " + str(b) + " in")
     b = round(b+0.5)
@@ -311,6 +310,11 @@ if B_type == "Simply Supported":
             Vu = W2*L/2 + P2/2
             P = P2
             W = W2
+        print("Δ*EI = 5*w*L^4*12^3/(384)+P*(L*12)^3/(48)")
+        del_iD_EI = 5*w_d*L**4*12**3/(384) + P_d*(L*12)**3/(48)
+        print("Δ_iD*EI = 5*" + str(w_d) + "*" + str(L) + "^4*12^3/(384)+" + str(P_d) + "*(" + str(L) + "*12)^3/(48)= " + str(round(del_iD_EI,3)))
+        del_iD_L_EI = 5*(w_d+w_l)*L**4*12**3/(384)+(P_d+P_l)*(L*12)**3/(48)
+        print("Δ_iD_L*EI = 5*(" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(384)+(" + str(P_d) + "+" + str(P_l) + ")*(" + str(L) + "*12)^3/(48) = " + str(round(del_iD_L_EI,3)))
 elif B_type == "Cantilever":
     if load == "point load" and beam_type == "Singely Reinforced Known Dimensions":
         # load combos
@@ -371,6 +375,11 @@ elif B_type == "Cantilever":
             Vu = W2*L/2 + P2/2
             P = P2
             W = W2
+        print("Δ*EI = w*L^4*12^3/(8)+P*(L*12)^3/(3)")
+        del_iD_EI = w_d*L**4*12**3/(8)+P_d*(L*12)**3/(3)
+        print("Δ_iD*EI = " + str(w_d) + "*" + str(L) + "^4*12^3/(8)+" + str(P_d) + "*(" + str(L) + "*12)^3/(3) = " + str(round(del_iD_EI,3)) + " in")
+        del_iD_L_EI = (w_d+w_l)*L**4*12**3/(8)+(P_d+P_l)*(L*12)**3/(3)
+        print("Δ_iD_L*EI = (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(8)+(" + str(P_d) + "+" + str(P_l) + ")*(" + str(L) + "*12)^3/(3) = " + str(round(del_iD_L_EI,3)) + " in")
 # find required area of steel
 phif = 0.9
 print("φf = 0.9")
@@ -593,6 +602,16 @@ for i in range(len(flexure_rebar)):
 #quick flexure overview
 for i in range(len(flexure_rebar)):
     print("dc_ratio of " + str(num_of_bars[i]) + " #" + str(flexure_rebar[i]) + "bars: " + str(round(dc_ratio[i],3)))
+counter = 0
+for i in range(len(d)):
+    if dc_ratio[i] < 0.05:
+        counter +=1
+if counter == 4 and beam_type == "Singely Reinforced Unknown Dimensions":
+    print("It appears something went wrong when making the beam, no size bars with any number of bars that can fit meet the  ACI318-19(22) code. Sorry for the inconvinence.")
+    sys.exit()
+elif counter == 4:
+    print("The given beam dimensions don't work for the loading.")
+    sys.exit()
 #shear desgin
 # only pulling working values
 counter = 0
@@ -798,14 +817,14 @@ else:
             x_counter = 0
             counter = 0
             while counter == 0:
-                if V_of_beam[x_counter] > phiv_Vc[r]:
+                if V_of_beam[x_counter] < phiv_Vc[r]:
                     x_change[r,0] = x_line[x_counter]
                     x_counter += 1
                     counter += 1
                 else:
                     x_counter += 1
             while counter == 1:
-                if V_of_beam[x_counter] > No_Stirrup[r]:
+                if V_of_beam[x_counter] < No_Stirrup[r]:
                     x_change[r,1] = x_line[x_counter]
                     x_counter += 1
                     counter += 1
@@ -969,8 +988,8 @@ for i in range(len(d_shear)):
     Mcr = fr*Ig/yt/(1000*12)
     print("Mcr = fr*Ig/yt/(1000*12)     " + str(fr) + "*" + str(round(Ig,3)) + "/" + str(yt) + "/(1000*12) = " + str(round(Mcr,3)) + " kft")
     # moment calcs
-    if B_type == "Simply Supported":
-        if load == "point load":
+    if B_type == "Simply Supported" :
+        if load == "point load" and beam_type == "Singely Reinforced Known Dimensions":
             print("M = P*L/4")
             M_dl = P_d*L/4
             print("M_dl = " + str(P_d) + "*" + str(L) + "/4 = " + str(M_dl) + " kft")
@@ -982,8 +1001,13 @@ for i in range(len(d_shear)):
             print("M_dl = " + str(w_d) + "*" + str(L) + "^2/8 = " + str(M_dl) + " kft")
             M_dl_ll = (w_d+w_l)*L**2/8
             print("M_dl_ll = (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^2/8 = " + str(M_dl) + " kft")
+        elif load == "point load" and beam_type == "Singely Reinforced Unknown Dimensions":
+            M_dl = w_d*L**2/8+P_d*L/4
+            print("M_dl = w_d*L^2/8+P_d*L/4     " + str(w_d) + "*" + str(L) + "^2/8+" + str(P_d) + "*" + str(L) + "/4 = " + str(M_dl) + " kft")
+            M_dl_ll = W2*L**2/8+P2*L/4
+            print("M_dl_ll = (w_d+w_l)*L^2/8+(P_d+P_l)*L/4     (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^2/8+(" + str(P_d) + "+" + str(P_l) + ")*" + str(L) + "/4 = " + str(M_dl_ll) + " kft")
     elif B_type == "Cantilever":
-        if load == "point load":
+        if load == "point load" and beam_type == "Singely Reinforced Known Dimensions":
             print("M = P*L")
             M_dl = P_d*L
             print("M_dl = " + str(P_d) + "*" + str(L) + " = " + str(M_dl) + " kft")
@@ -995,6 +1019,11 @@ for i in range(len(d_shear)):
             print("M_dl = " + str(w_d) + "*" + str(L) + "^2/2 = " + str(M_dl) + " kft")
             M_dl_ll = (w_d+w_l)*L**2/2
             print("M_dl_ll = (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^2/2 = " + str(M_dl) + " kft")
+        elif load == "point load" and beam_type == "Singely Reinforced Unknown Dimensions":
+            M_dl = w_d*L**2/2+P_d*L
+            print("M_dl = w_d*L^2/2+P_d*L     " + str(w_d) + "*" + str(L) + "^2/2+" + str(P_d) + "*" + str(L) + " = " + str(M_dl) + " kft")
+            M_dl_ll = (w_d+w_l)*L**2/2+(P_d+P_l)*L
+            print("M_dl_ll = (w_d+w_l)*L^2/8+(P_d+P_l)*L/4     (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^2/2+(" + str(P_d) + "+" + str(P_l) + ")*" + str(L) + " = " + str(M_dl_ll) + " kft")
     #calcing Ie
     if M_dl <= 2/3*Mcr:
         print("M_dl <= 2/3*Mcr     " + str(M_dl) + " ≤ 2/3*" + str(round(Mcr,3)) + " = " + str(round(2/3*Mcr)))
@@ -1013,32 +1042,10 @@ for i in range(len(d_shear)):
         Ie_dl_ll = Icr/(1-(2/3*Mcr/M_dl_ll)**2*(1-Icr/Ig))
         print("Ie_dl = Icr/(1-(2/3*Mcr/M_dl_ll)^2*(1-Icr/Ig))     " + str(round(Icr,3)) + "/(1-(2/3*" + str(round(Mcr,3)) + "/" + str(round(M_dl_ll,3)) + ")^2*(1-" + str(round(Icr,3)) + "/" + str(round(Ig,3)) + " = " + str(Ie_dl_ll) + " in^4")
     # calcing deflections
-    if B_type == "Simply Supported":
-        if load == "point load":
-            print("Δ = P*(L*12)^3/(48*Ec*Ie_dl)")
-            del_iD = P_d*(L*12)**3/(48*Ec*Ie_dl)
-            print("Δ_iD = " + str(P_d) + "*(" + str(L) + "*12)^3/(48*" + str(round(Ec,3)) + "*" + str(round(Ie_dl,3)) + " = " + str(round(del_iD,3)) + " in")
-            del_iD_L = (P_d+P_l)*(L*12)**3/(48*Ec*Ie_dl_ll)
-            print("Δ_iD_L = (" + str(P_d) + "+" + str(P_l) + ")*(" + str(L) + "*12)^3/(48*" + str(round(Ec,3)) + "*" + str(round(Ie_dl_ll,3)) + " = " + str(round(del_iD_L,3)) + " in")
-        elif load == "distributed load":
-            print("Δ = 5*w*L^4*12^3/(384*Ec*Ie_dl)")
-            del_iD = 5*w_d*L**4*12**3/(384*Ec*Ie_dl)
-            print("Δ_iD = 5*" + str(w_d) + "*" + str(L) + "^4*12^3/(384*" + str(round(Ec,3)) + "*" + str(round(Ie_dl,3)) + " = " + str(round(del_iD,3)) + " in")
-            del_iD_L = 5*(w_d+w_l)*L**4*12**3/(384*Ec*Ie_dl_ll)
-            print("Δ_iD_L = 5*(" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(384*" + str(round(Ec,3)) + "*" + str(round(Ie_dl_ll,3)) + " = " + str(round(del_iD_L,3)) + " in")
-    elif B_type == "Cantilever":
-        if load == "point load":
-           print("Δ = P*(L*12)^3/(3*Ec*Ie_dl)")
-           del_iD = P_d*(L*12)**3/(3*Ec*Ie_dl)
-           print("Δ_iD = " + str(P_d) + "*(" + str(L) + "*12)^3/(3*" + str(round(Ec,3)) + "*" + str(round(Ie_dl,3)) + " = " + str(round(del_iD,3)) + " in")
-           del_iD_L = (P_d+P_l)*(L*12)**3/(3*Ec*Ie_dl_ll)
-           print("Δ_iD_L = (" + str(P_d) + "+" + str(P_l) + ")*(" + str(L) + "*12)^3/(3*" + str(round(Ec,3)) + "*" + str(round(Ie_dl_ll,3)) + " = " + str(round(del_iD_L,3)) + " in")
-        elif load == "distributed load":
-            print("Δ = w*L^4*12^3/(8*Ec*Ie_dl)")
-            del_iD = w_d*L**4*12**3/(8*Ec*Ie_dl)
-            print("Δ_iD = " + str(w_d) + "*" + str(L) + "^4*12^3/(8*" + str(round(Ec,3)) + "*" + str(round(Ie_dl,3)) + " = " + str(round(del_iD,3)) + " in")
-            del_iD_L = (w_d+w_l)*L**4*12**3/(8*Ec*Ie_dl_ll)
-            print("Δ_iD_L = (" + str(w_d) + "+" + str(w_l) + ")*" + str(L) + "^4*12^3/(8*" + str(round(Ec,3)) + "*" + str(round(Ie_dl_ll,3)) + " = " + str(round(del_iD_L,3)) + " in")
+    del_iD = del_iD_EI/(Ec*Ie_dl)
+    print("Δ_iD = Δ_iD*Ec*Ie_dl/(Ec*Ie_dl)     " + str(del_iD_EI) + "/(" + str(Ec) + "*" + str(Ie_dl) + ") = " + str(del_iD) + " in")
+    del_iD_L = del_iD_L_EI/(Ec*Ie_dl_ll)
+    print("Δ_iD_L = Δ_iD_L*Ec*Ie_dl_L/(Ec*Ie_dl_L)     " + str(del_iD_L_EI) + "/(" + str(Ec) + "*" + str(Ie_dl_ll) + ") = " + str(del_iD_L) + " in")
     del_iL = del_iD_L-del_iD
     print("Δ_iL = Δ_iD_L-Δ_iD     " + str(round(del_iD_L,3)) + "-" + str(round(del_iD,3)) + " = " + str(round(del_iL,3)))
     #allowable deflection
