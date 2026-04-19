@@ -873,14 +873,14 @@ else:
                     cur_band += 1
             elif bands == 2:
                 if x_change[r,col] > 0:
-                    smax1 = d_shear[r]/4
-                    shear_math[r] += "\nsmax1 = d/4     " + str(d_shear[r]) + "/4 = " + str(smax1) + " in"
+                    smax1 = d_shear[r]/2
+                    shear_math[r] += "\nsmax1 = d/2     " + str(d_shear[r]) + "/2 = " + str(smax1) + " in"
                     smax2 = Av*fyt*1000/(0.75*fpc**0.5*b)
                     shear_math[r] += "\nsmax2 = Av*fyt*1000/(0.75*√(f'c)*b)     " + str(Av) + "*" + str(fyt) + "*1000/(0.75*√(" + str(fpc) + ")*" + str(b) + ") = " + str(round(smax2,3)) + " in"
                     smax3 = Av*fyt*1000/(50*b)
                     shear_math[r] += "\nsmax3 = Av*fyt*1000/(50*b)     " + str(Av) + "*" + str(fyt) + "*1000/(50*" + str(b) + ") = " + str(round(smax3,3)) + " in"
-                    smax4 = 12
-                    shear_math[r] += "\nsmax4 = 12 in"
+                    smax4 = 24
+                    shear_math[r] += "\nsmax4 = 24 in"
                     spacing[r,cur_band] = int(min(smax1,smax2,smax3,smax4))
                     shear_math[r] += "\nsmax = " + str(spacing[r,cur_band])
                     cur_band += 1
@@ -894,9 +894,54 @@ else:
                 shear_math[r] += "\nLength1 = next_whole_number(l2*12/s2)*s2     next_whole_number(l" + str(x_change[r,1]) + "*12/" + str(spacing[r,1]) + ")*" + str(spacing[r,1]) + " = " + str(Ls_S[r,1]) + " in"
                 Ls_S[r,2] = 0
             elif bands == 2:
-                Ls_S[r,0] = round(x_change[r,0]*12/spacing[r,0]+.5,0)*spacing[r,0]
+                Ls_S[r,0] = round(x_change[r,1]*12/spacing[r,0]+.5,0)*spacing[r,0]
                 shear_math[r] += "\nLength1 = next_whole_number(l1*12/s1)*s1     next_whole_number(l" + str(x_change[r,0]) + "*12/" + str(spacing[r,0]) + ")*" + str(spacing[r,0]) + " = " + str(Ls_S[r,0]) + " in"
                 Ls_S[r,1] = 0
+        # checking spacing across the beam for distributed loads
+        if bands == 3:
+            s_len = np.zeros(len(d_shear))
+            s_len_act = np.zeros(len(d_shear))
+            counter = 0
+            for i in range(len(d_shear)):
+                s1 = d_shear[i]/2
+                shear_math[i] += "\ns1 = d/2     " + str(d_shear[i]) + "/2 = " + str(s1) + " in"
+                s2 = 12
+                shear_math[i] += "/ns2 = 12 in"
+                s_len[i] = min(s1,s2)
+                shear_math[i] += "/ns = " + str(s_len[i]) + " in"
+                s_len_act[i] = (b-2*cover)/(Legs-1)
+                shear_math[i] += "s_act = (b-2*cover)/(Legs-1)     (" + str(b) + "-2*" + str(cover) + ")/(" + str(Legs) + "-1) = " + str(s_len_act[i]) + " in"
+                if s_len[i] < s_len_act[i]:
+                    shear_math[i] += "s < s_act     " + str(s_len[i]) + " < " + str(s_len_act[i]) + " THE BEAM HAS FAILED DO NOT USE!"
+                else:
+                    counter +=1
+                    shear_math[i] += "s ≥ s_act     " + str(s_len[i]) + " ≥ " + str(s_len_act[i])
+            if counter == 0:
+                print("The number of leggs don't meet the minimum required spacing, please try with more legs.")
+                sys.exit()
+        # checking shear if past 2 bands
+        if bands == 3:
+            phi_Vs_max = np.zeros(len(d_shear))
+            phi_V_max = np.zeros(len(d_shear))
+            counter = 0
+            for i in range(len(d_shear)):
+                phi_Vs_max[i] = 0.9*Av*fyt*d_shear[i]/spacing[i,0]
+                shear_math[i] += "ϕVs = ϕ_v*Av*fyt*d/s     0.9" + str(Av) + "*" + str(fyt) + "*" + str(d_shear[i] + "/" + str(spacing[i,0]) + " = " + str(phi_Vs_max[i]) + " k")
+                phi_V_max[i] += phi_Vs_max[i] + phiv_Vc[i]
+                shear_math[i] += "ϕV = ϕVc+ϕVs     " + str(phiv_Vc[i]) + "+" + str(phiv_Vc[i]) + " = " + str(phi_V_max[i])
+                if d_away == True:
+                    location = round(d_shear[i]-0.5)
+                    Vu = V_of_beam[0]
+                else:
+                    Vu = V_of_beam[0]
+                if phi_V_max[i] < Vu:
+                    shear_math[i] += "ϕV < Vu     " + str(phi_V_max[i]) + " < " + str(Vu + " THE BEAM HAS FAILED DO NOT USE!")
+                else:
+                    counter +=1
+                    shear_math[i] += "ϕV ≥ Vu     " + str(phi_V_max[i]) + " ≥ " + str(Vu)
+            if counter == 0:
+                print("The beam cant handle the max shear add more shear strength or concrete strength.")
+                sys.exit()
         #printing all math for Shear design
         for i in range(len(d_shear)):
             print(shear_math[i])
@@ -911,7 +956,7 @@ else:
                 elif B_type == "Cantilever":
                     print("     No stirrups required for the rest of the beam")
             elif bands == 2:
-                print(working_bar[i] + ": Band1 = Stops at " + str(Ls_S[i,0]) + " in spaced at " + str(spacing[i,0]) + " in.")
+                print(str(working_bar[i]) + ": Band1 = Stops at " + str(Ls_S[i,0]) + " in spaced at " + str(spacing[i,0]) + " in.")
                 if B_type == "Simply Supported":
                     print("     No stirrups required for remaining half of beam and the two halfs are mirrors of eachother.")
                 elif B_type == "Cantilever":
