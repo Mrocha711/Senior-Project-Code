@@ -898,6 +898,7 @@ else:
                 shear_math[r] += "\nLength1 = next_whole_number(l1*12/s1)*s1     next_whole_number(l" + str(x_change[r,0]) + "*12/" + str(spacing[r,0]) + ")*" + str(spacing[r,0]) + " = " + str(Ls_S[r,0]) + " in"
                 Ls_S[r,1] = 0
         # checking spacing across the beam for distributed loads
+        Note = [""]*len(d_shear)
         if bands == 3:
             s_len = np.zeros(len(d_shear))
             s_len_act = np.zeros(len(d_shear))
@@ -913,20 +914,43 @@ else:
                 shear_math[i] += "s_act = (b-2*cover)/(Legs-1)     (" + str(b) + "-2*" + str(cover) + ")/(" + str(Legs) + "-1) = " + str(s_len_act[i]) + " in"
                 if s_len[i] < s_len_act[i]:
                     shear_math[i] += "s < s_act     " + str(s_len[i]) + " < " + str(s_len_act[i]) + " THE BEAM HAS FAILED DO NOT USE!"
+                    Note[i] += "\nTHIS BEAM FAILS LEG SPACING AND ISN'T UP TO CODE!"
                 else:
                     counter +=1
                     shear_math[i] += "s ≥ s_act     " + str(s_len[i]) + " ≥ " + str(s_len_act[i])
             if counter == 0:
                 print("The number of leggs don't meet the minimum required spacing, please try with more legs.")
                 sys.exit()
-        # checking shear if past 2 bands
+        elif bands == 2:
+            s_len = np.zeros(len(d_shear))
+            s_len_act = np.zeros(len(d_shear))
+            counter = 0
+            for i in range(len(d_shear)):
+                s1 = d_shear[i]/2
+                shear_math[i] += "\ns1 = d     " + str(d_shear[i]) + " = " + str(s1) + " in"
+                s2 = 24
+                shear_math[i] += "/ns2 = 24 in"
+                s_len[i] = min(s1,s2)
+                shear_math[i] += "/ns = " + str(s_len[i]) + " in"
+                s_len_act[i] = (b-2*cover)/(Legs-1)
+                shear_math[i] += "s_act = (b-2*cover)/(Legs-1)     (" + str(b) + "-2*" + str(cover) + ")/(" + str(Legs) + "-1) = " + str(s_len_act[i]) + " in"
+                if s_len[i] < s_len_act[i]:
+                    shear_math[i] += "s < s_act     " + str(s_len[i]) + " < " + str(s_len_act[i]) + " THE BEAM HAS FAILED DO NOT USE!"
+                    Note[i] += "\nTHIS BEAM FAILS LEG SPACING AND ISN'T UP TO CODE!"
+                else:
+                    counter +=1
+                    shear_math[i] += "s ≥ s_act     " + str(s_len[i]) + " ≥ " + str(s_len_act[i])
+            if counter == 0:
+                print("The number of leggs don't meet the minimum required spacing, please try with more legs.")
+                sys.exit()
+        # checking shear if past 2 bands since will then need to check if max shear is resisted by shear bands
         if bands == 3:
             phi_Vs_max = np.zeros(len(d_shear))
             phi_V_max = np.zeros(len(d_shear))
             counter = 0
             for i in range(len(d_shear)):
                 phi_Vs_max[i] = 0.9*Av*fyt*d_shear[i]/spacing[i,0]
-                shear_math[i] += "ϕVs = ϕ_v*Av*fyt*d/s     0.9" + str(Av) + "*" + str(fyt) + "*" + str(d_shear[i] + "/" + str(spacing[i,0]) + " = " + str(phi_Vs_max[i]) + " k")
+                shear_math[i] += "ϕVs = ϕ_v*Av*fyt*d/s     0.9" + str(Av) + "*" + str(fyt) + "*" + str(d_shear[i]) + "/" + str(spacing[i,0]) + " = " + str(phi_Vs_max[i]) + " k"
                 phi_V_max[i] += phi_Vs_max[i] + phiv_Vc[i]
                 shear_math[i] += "ϕV = ϕVc+ϕVs     " + str(phiv_Vc[i]) + "+" + str(phiv_Vc[i]) + " = " + str(phi_V_max[i])
                 if d_away == True:
@@ -936,6 +960,7 @@ else:
                     Vu = V_of_beam[0]
                 if phi_V_max[i] < Vu:
                     shear_math[i] += "ϕV < Vu     " + str(phi_V_max[i]) + " < " + str(Vu + " THE BEAM HAS FAILED DO NOT USE!")
+                    Note[i] += "\nTHIS BEAM FAILS IN SHEAR AND ISN'T UP TO CODE!"
                 else:
                     counter +=1
                     shear_math[i] += "ϕV ≥ Vu     " + str(phi_V_max[i]) + " ≥ " + str(Vu)
@@ -1097,12 +1122,17 @@ for i in range(len(d_shear)):
     
     # might need to create a question for if floor or flat roof since diffrent
     del_short_allowed = L*12/360
+    counter = 0
     print("Δ_short_allowed = L*12/360     " + str(L) + "*12/360 = " + str(round(del_short_allowed)) + " in")
     if del_iL > del_short_allowed:
         print("Δ_iL > Δ_short_allowed     " + str(round(del_iL,3)) + " > " + str(round(del_short_allowed,3)) + " Therefore it isn't to code and doesn't work")
-        sys.exit()
+        Note[i] += "\nTHIS BEAM FAILED IN SHORT TERM DEFLECTION AND ISN'T UP TO CODE!"
     else:
         print("Δ_iL ≤ Δ_short_allowed     " + str(round(del_iL,3)) + " ≤ " + str(round(del_short_allowed,3)) + " Good")
+        counter += 1
+    if counter == 0:
+        print("THE BEAM FAILED IN SHORT TERM DEFLECTION!")
+        sys.exit()
     del_iLs = percent/100*del_iL
     print("Δ_iLs = " + str(percent) + "/100*" + str(del_iL) + " = " + str(round(del_iLs,3)) + " in")
     lam_infinite = 2/(1+50*Asp/(b*d_shear[i]))
@@ -1115,10 +1145,16 @@ for i in range(len(d_shear)):
     print("Δ_long = λ_t_0_∞*Δ_iD+Δ_iL+λ_∞*Δ_iLs     " + str(lam_t_0_infinite) + "*" + str(round(del_iD,3)) + "+" + str(round(del_iL,3)) + "+" + str(lam_infinite) + "*" + str(round(del_iLs,3)) + " = " + str(round(del_long[i],3)) + " in")
     del_long_allowed = L*12/480
     print("Δ_long_allowed = L*12/480     " + str(L) + "*12/480 = " + str(round(del_long_allowed,3)) + " in")
+    counter = 0
     if del_long[i] > del_long_allowed:
         print("Δ_long > Δ_long_allowed     " + str(round(del_long[i],3)) + " > " + str(round(del_long_allowed,3)) + " Therefore it isn't to code and doesn't work")
+        Note[i] += "\nTHIS BEAM FAILED IN SHORT TERM DEFLECTION AND ISN'T UP TO CODE!"
     else:
         print("Δ_long ≤ Δ_long_allowed     " + str(round(del_long[i],3)) + " ≤ " + str(round(del_long_allowed,3)) + " Good the beam works")
+        counter += 1
+    if counter == 0:
+        print("THE BEAM FAILED IN LONG TERM DEFLECTION!")
+        sys.exit()
 # Deflection over view
 print("Deflection Overview")
 for i in range(len(d_shear)):
@@ -1149,6 +1185,7 @@ for i in range(len(d_shear)):
     elif load == "point load":
         print("Only 1 Band spaced at " + str(smax[i]) + " in.")
     print("A displacement of " + str(round(del_long[i],3)) + " in occured ")
+    print(Note[i])
     print()
                 
                 
