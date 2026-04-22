@@ -113,8 +113,8 @@ while Tracker == 0:
     # splitting CMU Size into Nominal and actual Sizes
     CMU_Size = CMU_Size.lower() # Start of ChatGPT help
     if CMU_Size.count('x') == 2:
-        depth_nom, height_nom, length_nom = map(int, CMU_Size.split('x'))
-        depth_act, height_act, length_act = [d - 0.375 for d in map(int, CMU_Size.lower().split('x'))] # End of ChatGPT help
+        depth_nom, height_nom, length_nom = map(float, CMU_Size.split('x'))
+        depth_act, height_act, length_act = [d - 0.375 for d in map(float, CMU_Size.lower().split('x'))] # End of ChatGPT help
     else:
         Tracker = -1
         break
