@@ -1131,7 +1131,7 @@ for i in range(len(d_shear)):
     # might need to create a question for if floor or flat roof since diffrent
     del_short_allowed = L*12/360
     counter = 0
-    deflection_math[i] += "\nΔ_short_allowed = L*12/360     " + str(L) + "*12/360 = " + str(round(del_short_allowed)) + " in"
+    deflection_math[i] += "\nΔ_short_allowed = L*12/360     " + str(L) + "*12/360 = " + str(round(del_short_allowed,3)) + " in"
     if del_iL > del_short_allowed:
         deflection_math[i] += "\nΔ_iL > Δ_short_allowed     " + str(round(del_iL,3)) + " > " + str(round(del_short_allowed,3)) + " Therefore it isn't to code and doesn't work"
         Note[i] += "\nTHIS BEAM FAILED IN SHORT TERM DEFLECTION AND ISN'T UP TO CODE!"
