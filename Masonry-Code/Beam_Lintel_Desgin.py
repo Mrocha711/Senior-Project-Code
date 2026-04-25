@@ -98,11 +98,6 @@ space = 24 #in
 
 # DO NOT CHANGE ANYTHING FOLLOWING!!!-----------------------------------------------------
 
-# checking inputed values
-CMU_Size = CMU_Size.lower()
-if CMU_Size.count('.') > 0:
-    print("The code doesn't handle CMU that has decimals in it sorry for the inconvinience.")
-    sys.exit()
 fr = -1
 types = np.array(["M","S","N"])
 mortar_type = mortar_type.upper()
@@ -123,8 +118,8 @@ if fr == 0:
     
 # splitting CMU into parts
 if CMU_Size.count('x') == 2:
-    depth_nom, height_nom, length_nom = map(int, CMU_Size.split('x'))
-    depth_act, height_act, length_act = [d - 0.375 for d in map(int, CMU_Size.lower().split('x'))]
+    depth_nom, height_nom, length_nom = map(float, CMU_Size.split('x'))
+    depth_act, height_act, length_act = [d - 0.375 for d in map(float, CMU_Size.lower().split('x'))]
     
 # sizes getting made
 Length = Length_Beam + Length_Bearing/12 #in
