@@ -245,8 +245,8 @@ if procedure == "Analyzing":
             else:
                 print("The rebar size you typed is not in our list of rebar sizes.")
                 sys.exit()
-            As = Top_Rebar_Count*Rebar_area + Bottom_Rebar_Count*Rebar_area
-            print("As = " + str(Top_Rebar_Count) + "*" + str(Rebar_area) + " + " + str(Top_Rebar_Count) + "*" + str(Rebar_area) + " = " + str(As) + " in^2")
+            As = round(Top_Rebar_Count*Rebar_area + Bottom_Rebar_Count*Rebar_area,2)
+            print("As = " + str(Top_Rebar_Count) + "*" + str(Rebar_area) + " + " + str(Bottom_Rebar_Count) + "*" + str(Rebar_area) + " = " + str(As) + " in^2")
             #Finding c and a
             if fpc <= 4000:
                 print("f'c ≤ 4000 so β1 = 0.85")
@@ -289,7 +289,7 @@ if procedure == "Analyzing":
                 print("Therefore Φf = 0.9")
                 phif = 0.9
             else:
-                print("εt = " + str(round(es,5)) + " ≥ εy + 0.003 = " + str(round(ey,5)) + " + 0.003 = " + str(round(ey+0.003,5))+ " NO")
+                print("εt = " + str(round(est,5)) + " ≥ εy + 0.003 = " + str(round(ey,5)) + " + 0.003 = " + str(round(ey+0.003,5))+ " NO")
                 print("Fails Φf = 0.9")
                 sys.exit()
             # Calculating PhifMn
