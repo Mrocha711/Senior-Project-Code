@@ -50,7 +50,6 @@ def createPM_masonry(masonry_block, reinf_data, element_dataframe ):
             # TMS 402 9.2.4.1 b
             P_n = 0.8*(0.8 * (A_n) * (f_m) * ((70*r)/h)**2 )
     
-    #print(P_n)
     #--------------------------------------------------------------------------
     # Creating P-M diagram (step by step)
     section_length = masonry_block.block_length * element_dataframe.courses
@@ -70,8 +69,6 @@ def createPM_masonry(masonry_block, reinf_data, element_dataframe ):
  
         #Step 2: Compute C_m = 0.64 * f_m * c * masonry_block.thickness
         C_m = 0.64 * f_m * c * masonry_block.block_width
-
-        #print('---')
 
         e_steel = 0
         #Step 3: Compute x ie depth of reinfrocement 
@@ -99,16 +96,6 @@ def createPM_masonry(masonry_block, reinf_data, element_dataframe ):
             M_t += f_s_layer * (layer_depth[1] - section_length/2)
             e_steel = e_layer
             
-            #if round(c,2) == 10.42:
-            #    print('LOOK:')
-            #    print(e_layer)
-            #    print(f_s_layer)
-            #    print(T_s)
-            #    print(M_t)
-            #    print('')
-            
-        #print(M_t)
-        #print(T_s)
         # if (reinf_boolean == False): T = 0
         if (reinf_bool == False):
             return('Masonry Reinforcement Required')
@@ -117,10 +104,7 @@ def createPM_masonry(masonry_block, reinf_data, element_dataframe ):
         P_nu = C_m - T_s
         #Step 7/8: Calculate Moment: (M_tension + M_compression)
         M_nu = M_t + (C_m * ( (section_length/2)-(0.8*c/2) )) 
-        #if round(c,2) == 10.42:
-        #    print(C_m)
-        #    print(M_nu)
-        #    print(P_nu)
+ 
 
         #Step 9: Compute Phi and ensure it does not exceed limits
         #print(e_steel)
@@ -182,9 +166,9 @@ x0, x1, x2, x3, x4, x5, x6 = createPM_masonry(testBlock, testReinf, testElement)
 
 plt.grid(True)
 #plot unreduced
-plt.plot(x4, x2)
+plt.plot(x4, x2, color='blue')
 #plot reduced
-plt.plot(x5, x3)
+plt.plot(x5, x3, color='red')
 plt.plot([0,200,400,600,4500], [x1,x1,x1,x1,x1])
 plt.plot([0,100,200,300,3000], [x0,x0,x0,x0,x0])
 
