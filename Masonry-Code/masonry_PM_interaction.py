@@ -11,6 +11,7 @@ Created on Tue Mar 31 14:51:50 2026
 # imports
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 def createPM_masonry(masonry_block, reinf_data, element_dataframe ):
     
@@ -169,6 +170,9 @@ plt.grid(True)
 plt.plot(x4, x2, color='blue')
 #plot reduced
 plt.plot(x5, x3, color='red')
-plt.plot([0,200,400,600,4500], [x1,x1,x1,x1,x1])
-plt.plot([0,100,200,300,3000], [x0,x0,x0,x0,x0])
+plt.plot([0,x4[int(x1)]], [x1,x1])
+plt.plot([0,x5[int(x0)]], [x0,x0])
+
+save_path = os.path.expanduser("~/Desktop/PM_test.png")
+plt.savefig(save_path)
 
