@@ -23,7 +23,7 @@ import sys
 Support = "SS"
 
 # for the CMU_Size have "" souround it and use depth x height x length
-CMU_Size = "8x8x16"
+CMU_Size = "36x2111x1"
 
 # mortar type, Options M, S, N, sourround it with ""
 mortar_type = "S"
@@ -33,71 +33,71 @@ mortar_type = "S"
 # Ungrouted Units, UU
 # Partial Grouted Units, PGU
 # Fully Grouted Units, FGU
-Grout_Fill = "FGU"
+Grout_Fill = "PGU"
 
 # number of courses in beam, units number of bricks
-Beam_Courses = 5 #bricks
+Beam_Courses = 150 #bricks
 
 # length of the lintel do not include bearing in the length, use feet for units
-Length_Beam = 25 #ft
+Length_Beam = 6 #ft
 
 # bearing length of one side, use inches for units
-Length_Bearing = 0 #in
+Length_Bearing = 22 #in
 
 # number of courses above lintel, units is number of bricks
-Number_Courses = 25 #bricks
+Number_Courses = 67 #bricks
 
 
 # area based loads
 
 # dead load of the wall, units psf
-Dead_load_psf = 10 #psf
+Dead_load_psf = 1 #psf
 
 # self weight of the beam, units psf
-Self_load_psf = 20 #psf
+Self_load_psf = 220 #psf
 
 # length based loads 
 
 # dead load of the wall, units plf
-Dead_load_plf = 0 #plf
+Dead_load_plf = 5.9 #plf
 
 # self weight of the beam, units plf
-Self_load_plf = 0 #plf
+Self_load_plf = 2 #plf
 
 # live load on the beam, units plf
-Live_load_plf = 0 #plf
+Live_load_plf = 17 #plf
 
 # roof/floor based live load and dead
 
 # depth of floor that the wall supports, units feet
-Floor_depth = 0 #ft
+Floor_depth = 11 #ft
 
 # floor dead load, units psf
-Floor_dead_psf = 0 #psf
+Floor_dead_psf = 10 #psf
 
 # floor live load it wont calculate reduction must do by self, units psf
-Floor_live_psf = 0 #psf
+Floor_live_psf = 89 #psf
 
 # point load straight in middle of beam, units of pounds
 Point_load = 0 #pounds
 
 # strength of the CMU, units of ksi
-f_m = 2 #ksi
+f_m = 0.1 #ksi
 
 # size of horizontal bar, just put the number
-bar_size_horizontal = 6
+bar_size_horizontal = 9
 
 # number of horizontal bars
-bar_count_horizontal = 2
+bar_count_horizontal = 41
 
 # size of vertical bar, just put the number
-bar_size_vertical = 4
+bar_size_vertical = 65
 
 # vertical spacing, units inches
-space = 24 #in
+space = 2 #in
 
 # strength of rebar, units ksi
-fy = 60 #ksi
+fy = 36 #ksi
 
 # modulus of Elasticity of steel, units of ksi
 E_s = 29000 #ksi
