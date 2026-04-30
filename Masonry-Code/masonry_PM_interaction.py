@@ -59,7 +59,7 @@ def createPM_masonry(masonry_block, reinf_data, element_dataframe ):
     # steps: (section_length - 0) / num of steps 
     c_step = section_length/num_of_iterations
     
-    for i in range (num_of_iterations):
+    for i in range (num_of_iterations+1000):
         M_t = 0
         T_s = 0
         
