@@ -69,3 +69,35 @@ def newmarks_average( beam_type, p, w, L):
     # Show the plot
     plt.show()      
     return V, M
+
+
+L = 2
+P_L = 1
+number_of_x = round(L+1)
+x_line = np.zeros(number_of_x+P_L)
+i = 0
+while i < len(x_line):
+    if P_L-1 < i and i < P_L:
+        x_line[i] = P_L
+        x_line[i+1] = i
+        i += 2
+    else:
+        x_line[i] = i
+        i += 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

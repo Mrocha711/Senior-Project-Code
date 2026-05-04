@@ -26,57 +26,57 @@ Support = "SS"
 CMU_Size = "8x8x16"
 
 # mortar type, Options M, S, N, sourround it with ""
-mortar_type = "S"
+mortar_type = "M"
 
 #Grout Pattern, Options bellow, sourround with ""
 # Solid units, SU
 # Ungrouted Units, UU
 # Partial Grouted Units, PGU
 # Fully Grouted Units, FGU
-Grout_Fill = "PGU"
+Grout_Fill = "UU"
 
 # number of courses in beam, units number of bricks
-Beam_Courses = 15 #bricks
+Beam_Courses = 3 #bricks
 
 # length of the lintel do not include bearing in the length, use feet for units
-Length_Beam = 10 #ft
+Length_Beam = 1 #ft
 
 # bearing length of one side, use inches for units
-Length_Bearing = 6 #in
+Length_Bearing = 1 #in
 
 # number of courses above lintel, units is number of bricks
-Number_Courses = 10 #bricks
+Number_Courses = 1 #bricks
 
 
 # area based loads
 
 # dead load of the wall, units psf
-Dead_load_psf = 50 #psf
+Dead_load_psf = 1 #psf
 
 # self weight of the beam, units psf
-Self_load_psf = 50 #psf
+Self_load_psf = 1 #psf
 
 # length based loads 
 
 # dead load of the wall, units plf
-Dead_load_plf = 20 #plf
+Dead_load_plf = 1 #plf
 
 # self weight of the beam, units plf
-Self_load_plf = 20 #plf
+Self_load_plf = 2 #plf
 
 # live load on the beam, units plf
-Live_load_plf = 20 #plf
+Live_load_plf = 2 #plf
 
 # roof/floor based live load and dead
 
 # depth of floor that the wall supports, units feet
-Floor_depth = 10 #ft
+Floor_depth = 1 #ft
 
 # floor dead load, units psf
-Floor_dead_psf = 20 #psf
+Floor_dead_psf = 0.2 #psf
 
 # floor live load it wont calculate reduction must do by self, units psf
-Floor_live_psf = 20 #psf
+Floor_live_psf = 0.001 #psf
 
 # point load straight in middle of beam, units of pounds
 Point_load = 0 #pounds
@@ -85,19 +85,19 @@ Point_load = 0 #pounds
 f_m = 2 #ksi
 
 # size of horizontal bar, just put the number
-bar_size_horizontal = 5
+bar_size_horizontal = 4
 
 # number of horizontal bars
-bar_count_horizontal = 2
+bar_count_horizontal = 4
 
 # size of vertical bar, just put the number
-bar_size_vertical = 5
+bar_size_vertical = 1
 
 # vertical spacing, units inches
-space = 16 #in
+space = 20000 #in
 
 # strength of rebar, units ksi
-fy = 60 #ksi
+fy = 0.0001 #ksi
 
 # modulus of Elasticity of steel, units of ksi
 E_s = 29000 #ksi

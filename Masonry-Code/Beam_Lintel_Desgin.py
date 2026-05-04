@@ -26,7 +26,7 @@ Support = "SS"
 
 # plug in the CMU size you want to try
 # for the CMU_Size have "" souround it and use depth x height x length
-CMU_Size = "8x3x16"
+CMU_Size = "8x8x16"
 
 # mortar type, Options M, S, N, sourround it with ""
 mortar_type = "S"
