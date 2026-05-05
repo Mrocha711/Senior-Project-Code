@@ -39,37 +39,37 @@ mortar_type = "S"
 Grout_Fill = "FGU"
 
 # number of courses from bottom to top
-Courses = 15 #bricks
+Courses = 25 #bricks
 
 # length of the lintel do not include bearing in the length, use feet for units
 Length_Beam = 10 #ft
 
 # bearing length of one side, use inches for units
-Length_Bearing = 6 #in
+Length_Bearing = 4 #in
 
 # area based loads
 
 # dead load of the wall, units psf
-Dead_load_psf = 50 #psf
+Dead_load_psf = 0 #psf
 
 # self weight of the beam, units psf
-Self_load_psf = 50 #psf
+Self_load_psf = 85 #psf
 
 # length based loads 
 
 # dead load of the wall, units plf
-Dead_load_plf = 100 #plf
+Dead_load_plf = 50 #plf
 
 # self weight of the beam, units plf
-Self_load_plf = 100 #plf
+Self_load_plf = 50 #plf
 
 # live load on the beam, units plf
-Live_load_plf = 100 #plf
+Live_load_plf = 50 #plf
 
 # roof/floor based live load and dead
 
 # depth of floor that the wall supports, units feet
-Floor_depth = 10 #ft
+Floor_depth = 1 #ft
 
 # floor dead load, units psf
 Floor_dead_psf = 100 #psf
@@ -81,10 +81,10 @@ Floor_live_psf = 50 #psf
 Point_load = 0 #pounds
 
 # strength of the CMU, units of ksi
-f_m = 2 #ksi
+f_m = 2.5 #ksi
 
 # strength of rebar, units ksi
-fy = 50 #ksi
+fy = 60 #ksi
 
 # modulus of Elasticity of steel, units of ksi
 E_s = 29000 #ksi
@@ -93,7 +93,7 @@ E_s = 29000 #ksi
 gap = 2.5 # in
 
 # vertical spacing, units inches
-space = 24 #in
+space = 8 #in
 
 
 # DO NOT CHANGE ANYTHING FOLLOWING!!!-----------------------------------------------------

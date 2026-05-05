@@ -36,13 +36,13 @@ mortar_type = "M"
 Grout_Fill = "UU"
 
 # number of courses in beam, units number of bricks
-Beam_Courses = 3 #bricks
+Beam_Courses = 2 #bricks
 
 # length of the lintel do not include bearing in the length, use feet for units
-Length_Beam = 1 #ft
+Length_Beam = 4 #ft
 
 # bearing length of one side, use inches for units
-Length_Bearing = 1 #in
+Length_Bearing = 4 #in
 
 # number of courses above lintel, units is number of bricks
 Number_Courses = 1 #bricks
@@ -51,53 +51,53 @@ Number_Courses = 1 #bricks
 # area based loads
 
 # dead load of the wall, units psf
-Dead_load_psf = 1 #psf
+Dead_load_psf = 85 #psf
 
 # self weight of the beam, units psf
-Self_load_psf = 1 #psf
+Self_load_psf = 85 #psf
 
 # length based loads 
 
 # dead load of the wall, units plf
-Dead_load_plf = 1 #plf
+Dead_load_plf = 0 #plf
 
 # self weight of the beam, units plf
-Self_load_plf = 2 #plf
+Self_load_plf = 0 #plf
 
 # live load on the beam, units plf
-Live_load_plf = 2 #plf
+Live_load_plf = 0 #plf
 
 # roof/floor based live load and dead
 
 # depth of floor that the wall supports, units feet
-Floor_depth = 1 #ft
+Floor_depth = 10 #ft
 
 # floor dead load, units psf
-Floor_dead_psf = 0.2 #psf
+Floor_dead_psf = 100 #psf
 
 # floor live load it wont calculate reduction must do by self, units psf
-Floor_live_psf = 0.001 #psf
+Floor_live_psf = 80 #psf
 
 # point load straight in middle of beam, units of pounds
 Point_load = 0 #pounds
 
 # strength of the CMU, units of ksi
-f_m = 2 #ksi
+f_m = 2.0 #ksi
 
 # size of horizontal bar, just put the number
-bar_size_horizontal = 4
+bar_size_horizontal = 5
 
 # number of horizontal bars
-bar_count_horizontal = 4
+bar_count_horizontal = 2
 
 # size of vertical bar, just put the number
-bar_size_vertical = 1
+bar_size_vertical = 4
 
 # vertical spacing, units inches
-space = 20000 #in
+space = 8 #in
 
 # strength of rebar, units ksi
-fy = 0.0001 #ksi
+fy = 60 #ksi
 
 # modulus of Elasticity of steel, units of ksi
 E_s = 29000 #ksi
