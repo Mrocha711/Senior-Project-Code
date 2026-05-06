@@ -72,18 +72,21 @@ def newmarks_average( beam_type, p, w, L):
 
 
 L = 2
-P_L = 1
-number_of_x = round(L+1)
-x_line = np.zeros(number_of_x+P_L)
-i = 0
-while i < len(x_line):
-    if P_L-1 < i and i < P_L:
-        x_line[i] = P_L
-        x_line[i+1] = i
-        i += 2
-    else:
-        x_line[i] = i
-        i += 1
+P_L = np.array([1,1.5])
+
+# getting all inch values along the beam
+number_of_x = round(L*12+1)
+x_line = np.zeros(number_of_x)
+for i in range(len(x_line)):
+    x_line[i] = i/12
+# combining all the distances for loads into one array
+Load_L = np.append([P_L], [1])
+Load_L = np.unique([Load_L])
+
+# combining the lengtharray with all the distance arrays for loads to have all important points.
+x_line = np.append([x_line],[P_L])
+# sorting all the distances into numerical order
+x_line = np.sort([x_line])
 
 
 
