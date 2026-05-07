@@ -39,13 +39,13 @@ mortar_type = "S"
 Grout_Fill = "FGU"
 
 # number of courses from bottom to top
-Courses = 5 #bricks
+Courses = 25 #bricks
 
 # length of the lintel do not include bearing in the length, use feet for units
-Length_Beam = 25 #ft
+Length_Beam = 10 #ft
 
 # bearing length of one side, use inches for units
-Length_Bearing = 0 #in
+Length_Bearing = 4 #in
 
 # area based loads
 
@@ -53,35 +53,35 @@ Length_Bearing = 0 #in
 Dead_load_psf = 0 #psf
 
 # self weight of the beam, units psf
-Self_load_psf = 0 #psf
+Self_load_psf = 85 #psf
 
 # length based loads 
 
 # dead load of the wall, units plf
-Dead_load_plf = 600 #plf
+Dead_load_plf = 50 #plf
 
 # self weight of the beam, units plf
-Self_load_plf = 600 #plf
+Self_load_plf = 50 #plf
 
 # live load on the beam, units plf
-Live_load_plf = 400 #plf
+Live_load_plf = 50 #plf
 
 # roof/floor based live load and dead
 
 # depth of floor that the wall supports, units feet
-Floor_depth = 0 #ft
+Floor_depth = 1 #ft
 
 # floor dead load, units psf
-Floor_dead_psf = 0 #psf
+Floor_dead_psf = 100 #psf
 
 # floor live load it wont calculate reduction must do by self, units psf
-Floor_live_psf = 0 #psf
+Floor_live_psf = 50 #psf
 
 # point load straight in middle of beam, units of pounds
 Point_load = 0 #pounds
 
 # strength of the CMU, units of ksi
-f_m = 2 #ksi
+f_m = 2.5 #ksi
 
 # strength of rebar, units ksi
 fy = 60 #ksi
@@ -93,7 +93,7 @@ E_s = 29000 #ksi
 gap = 2.5 # in
 
 # vertical spacing, units inches
-space = 24 #in
+space = 8 #in
 
 
 # DO NOT CHANGE ANYTHING FOLLOWING!!!-----------------------------------------------------
