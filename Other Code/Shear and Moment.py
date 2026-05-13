@@ -11,7 +11,7 @@ import math
 #test varriables
 L = 2
 P = np.array([1])
-P_L = np.array([1])
+P_L = np.array([0.5])
 W = np.array([])
 W_L = np.array([])
 
@@ -43,9 +43,19 @@ def Simply_Supported(P, P_L, W, W_L, L):
         counter = 0
         for y in range(len(x_line)):
             if x_line[y] <= P_L[i] and counter == 0:
-                V[i] = P[i]/2
+                V[y] = P[i]*(L-P_L[i])/2
+                if x_line[y] == P_L[i]:
+                    counter = 1
             else:
-                V[i] = -P[i]/2
+                V[y] = -P[i]*(L-(L-P_L[i]))/2
+    #Shear plot
+    plt.plot(x_line, V, color='blue', linestyle='-',)
+    # Add title and labels
+    plt.title("Shear Diagram")
+    plt.xlabel("Length (ft)")
+    plt.ylabel("Shear (K)")
+    # Show the plot
+    plt.show()
     
     
     
