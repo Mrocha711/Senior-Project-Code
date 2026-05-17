@@ -323,7 +323,7 @@ while count1 == 0:
             else:
                 print("M_u > M_cr        " + str(round(Mu, 3)) + ">" + str(round(Mcr, 3)) + " GOOD")
             if Mn < 1.3*Mcr:
-                print("M_n > 1.3M_cr        X    rather        " + str(round(Mn, 3)) + "<" + str(round(1.3*Mcr, 3)))
+                print("M_n < 1.3M_cr        X    rather        " + str(round(Mn, 3)) + "<" + str(round(1.3*Mcr, 3)))
                 continue
             else:
                 print("M_n > 1.3M_cr        " + str(round(Mn, 3)) + ">" + str(round(1.3*Mcr, 3)) + " GOOD")

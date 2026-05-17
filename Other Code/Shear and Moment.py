@@ -10,8 +10,8 @@ import math
 
 #test varriables
 L = 2
-P = np.array([1])
-P_L = np.array([0.5])
+P = np.array([1,1])
+P_L = np.array([0.5,1.5])
 W = np.array([])
 W_L = np.array([])
 
@@ -37,17 +37,38 @@ def Simply_Supported(P, P_L, W, W_L, L):
     #creating arrays to hold values of shear moment and deflection
     V = np.zeros(len(x_line))
     M = np.zeros(len(x_line))
+    Del_EI = np.zeros(len(x_line))
+    R1 = 0
+    R2 = 0
     
     #Solving for if it has any point loads on the beam
-    for i in range(len(P)):
+    for i in range(len(P_L)):
         counter = 0
+        a = L-(L-P_L[i])
+        b = L-P_L[i]
+        R1 += P[i]*b/2
+        R2 += P[i]*a/2
         for y in range(len(x_line)):
-            if x_line[y] <= P_L[i] and counter == 0:
-                V[y] = P[i]*(L-P_L[i])/2
+            if P_L[i] == 0:
+                V[y] += 0
+                M[y] += 0
+                Del_EI[y] += 0
+            elif P_L[i] == L:
+                V[y] += 0
+                M[y] += 0
+                Del_EI[y] += 0
+            elif x_line[y] <= P_L[i] and counter == 0:
+                V[y] += P[i]*b/2
+                # Negative so that it is tension side for moment diagram
+                M[y] += -P[i]*b*x_line[y]/L
+                Del_EI[y] += -P[i]*b*x_line[y]/(6*L)*(L**2-b**2-x_line[y]**2)
                 if x_line[y] == P_L[i]:
                     counter = 1
             else:
-                V[y] = -P[i]*(L-(L-P_L[i]))/2
+                V[y] += -P[i]*a/2
+                # Negative so that it is tension side for moment diagram
+                M[y] += -P[i]*a*(L-x_line[y])/L
+                Del_EI[y] += -P[i]*a*(L-x_line[y])/(6*L)*(L**2-a**2-(L-x_line[y])**2)
     #Shear plot
     plt.plot(x_line, V, color='blue', linestyle='-',)
     # Add title and labels
@@ -56,7 +77,22 @@ def Simply_Supported(P, P_L, W, W_L, L):
     plt.ylabel("Shear (K)")
     # Show the plot
     plt.show()
-    
+    #moment plot
+    plt.plot(x_line, M, color='blue', linestyle='-',)
+    # Add title and labels
+    plt.title("Moment Diagram")
+    plt.xlabel("Length (ft)")
+    plt.ylabel("Moment (K-ft)")
+    # Show the plot
+    plt.show()
+    #Deflection times EI plot
+    plt.plot(x_line, Del_EI, color='blue', linestyle='-',)
+    # Add title and labels
+    plt.title("Deflection times EI")
+    plt.xlabel("Length (ft)")
+    plt.ylabel("Displacement*EI (ft*EI)")
+    # Show the plot
+    plt.show()      
     
     
     
