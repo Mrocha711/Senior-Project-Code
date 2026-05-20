@@ -10,8 +10,8 @@ import math
 
 #test varriables
 L = 2
-P = np.array([1,1])
-P_L = np.array([0.5,1.5])
+P = np.array([1])
+P_L = np.array([1.5])
 W = np.array([])
 W_L = np.array([])
 
@@ -41,7 +41,7 @@ def Simply_Supported(P, P_L, W, W_L, L):
     R1 = 0
     R2 = 0
     
-    #Solving for if it has any point loads on the beam
+    #Solving for shear, moment, and deflected shape of point loads on the beam
     for i in range(len(P_L)):
         counter = 0
         a = L-(L-P_L[i])
@@ -69,6 +69,7 @@ def Simply_Supported(P, P_L, W, W_L, L):
                 # Negative so that it is tension side for moment diagram
                 M[y] += -P[i]*a*(L-x_line[y])/L
                 Del_EI[y] += -P[i]*a*(L-x_line[y])/(6*L)*(L**2-a**2-(L-x_line[y])**2)
+        #Solving for shear, moment, and deflected shape of distributed loads on the beam
     #Shear plot
     plt.plot(x_line, V, color='blue', linestyle='-',)
     # Add title and labels
