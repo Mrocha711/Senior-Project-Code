@@ -33,28 +33,28 @@ mortar_type = "M"
 # Ungrouted Units, UU
 # Partial Grouted Units, PGU
 # Fully Grouted Units, FGU
-Grout_Fill = "UU"
+Grout_Fill = "FGU"
 
 # number of courses in beam, units number of bricks
-Beam_Courses = 2 #bricks
+Beam_Courses = 5 #bricks
 
 # length of the lintel do not include bearing in the length, use feet for units
-Length_Beam = 4 #ft
+Length_Beam = 25 #ft
 
 # bearing length of one side, use inches for units
-Length_Bearing = 4 #in
+Length_Bearing = 0 #in
 
 # number of courses above lintel, units is number of bricks
-Number_Courses = 1 #bricks
+Number_Courses = 25 #bricks
 
 
 # area based loads
 
 # dead load of the wall, units psf
-Dead_load_psf = 85 #psf
+Dead_load_psf = 10 #psf
 
 # self weight of the beam, units psf
-Self_load_psf = 85 #psf
+Self_load_psf = 20 #psf
 
 # length based loads 
 
@@ -70,13 +70,13 @@ Live_load_plf = 0 #plf
 # roof/floor based live load and dead
 
 # depth of floor that the wall supports, units feet
-Floor_depth = 10 #ft
+Floor_depth = 0 #ft
 
 # floor dead load, units psf
-Floor_dead_psf = 100 #psf
+Floor_dead_psf = 0 #psf
 
 # floor live load it wont calculate reduction must do by self, units psf
-Floor_live_psf = 80 #psf
+Floor_live_psf = 0 #psf
 
 # point load straight in middle of beam, units of pounds
 Point_load = 0 #pounds
@@ -85,7 +85,7 @@ Point_load = 0 #pounds
 f_m = 2.0 #ksi
 
 # size of horizontal bar, just put the number
-bar_size_horizontal = 5
+bar_size_horizontal = 6
 
 # number of horizontal bars
 bar_count_horizontal = 2
@@ -94,7 +94,7 @@ bar_count_horizontal = 2
 bar_size_vertical = 4
 
 # vertical spacing, units inches
-space = 8 #in
+space = 24 #in
 
 # strength of rebar, units ksi
 fy = 60 #ksi
