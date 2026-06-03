@@ -9,20 +9,22 @@ import matplotlib.pyplot as plt
 import math
 
 #test varriables
-L = 2
-P = np.array([1])
-P_L = np.array([1.5])
+L = 20
+P = np.array([1,1,1,1,1,1,1,1,1])
+P_L = np.array([2,4,6,8,10,12,14,16,18,])
 W = np.array([])
-W_L = np.array([])
+W_S = np.array([])
+W_E = np.array([])
 
-def Simply_Supported(P, P_L, W, W_L, L):
+def Simply_Supported(P, P_L, W, W_S, W_E, L):
     # getting all inch values along the beam
     number_of_x = round(L*12+1)
     x_line = np.zeros(number_of_x)
     for i in range(len(x_line)):
         x_line[i] = i/12
     # combining all the distances for loads into one array
-    Load_L = np.append([P_L], [W_L])
+    Load_L = np.append([P_L], [W_S])
+    Load_L = np.append([Load_L],[W_E])
     Load_L = np.append(np.unique([Load_L]), np.unique([P_L]))
     
     # combining the lengtharray with all the distance arrays for loads to have all important points.
